@@ -1,0 +1,22 @@
+<div class="logs">
+    <div class="no-logs" *ngIf="loading === false && logs.length == 0">
+        <span>No logs. Start a subscriber to show any logs</span>
+    </div>
+
+    <div class="task-items" *ngFor="let group of logs | groupBy: 'properties.TaskId.value' | pairs; let groupOdd = odd">
+        <h4 class="task-id">TaskId: {{group[0]}}</h4>
+        <div class="scroll">
+            <div *ngFor="let item of group[1] | reverse; let odd = odd">
+                <app-log [log]="item" [odd]="odd">
+                </app-log>
+            </div>
+        </div>
+    </div>
+
+    <!-- <app-log *ngFor="let l of logs; let odd = odd" [log]="l" [odd]="odd"></app-log> -->
+</div>
+
+<div class="buttons">
+    <button (click)="closeViewer()">Close</button>
+    <button (click)="update()">Update</button>
+</div>

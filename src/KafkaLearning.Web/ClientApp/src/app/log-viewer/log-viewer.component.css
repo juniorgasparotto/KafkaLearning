@@ -1,0 +1,47 @@
+:host {
+    border: solid 2px #023166;
+    background-color: #000C14;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.logs {
+    height: 90%;
+    overflow: auto;
+}
+
+.logs .task-items h4 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.no-logs {
+    text-align: center;
+    padding-top: 30%;
+}
+
+.no-logs span {}
+
+.buttons {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    padding: 10px;
+    background-color: black;
+    box-sizing: border-box;
+}
+
+.buttons button {
+    float: right;
+}
+
+.task-items {
+    padding: 10px;    
+}
+
+.task-items .scroll {
+    height: 150px;
+    overflow: auto;
+}

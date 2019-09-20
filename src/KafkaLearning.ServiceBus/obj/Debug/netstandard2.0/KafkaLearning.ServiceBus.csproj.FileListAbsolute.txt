@@ -1,0 +1,9 @@
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.csprojAssemblyReference.cache
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.csproj.CoreCompileInputs.cache
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.AssemblyInfoInputs.cache
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.AssemblyInfo.cs
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\bin\Debug\netstandard2.0\KafkaLearning.ServiceBus.deps.json
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\bin\Debug\netstandard2.0\KafkaLearning.ServiceBus.dll
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\bin\Debug\netstandard2.0\KafkaLearning.ServiceBus.pdb
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.dll
+d:\Junior\Projetos\KafkaLearning\src\KafkaLearning.ServiceBus\obj\Debug\netstandard2.0\KafkaLearning.ServiceBus.pdb

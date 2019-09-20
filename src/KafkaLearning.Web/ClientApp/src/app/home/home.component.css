@@ -1,0 +1,111 @@
+/*
+    Actions
+*/
+
+div.actions {
+    width: 100%;
+    min-height: 30px;
+    background-color: #000c14;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+
+div.logo {
+    height: 100%;
+    width: 100px;
+    text-align: center;
+}
+
+div.actions .buttons {
+    margin-left: 20px;
+    height: 100%;
+}
+
+
+/*
+    Producer
+*/
+
+div.producer {
+    width: 100%;
+    min-height: 100px;
+    background-color: #00162b;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+}
+
+div.producer .config {
+    margin-right: 5px;
+    flex: 2;
+}
+
+div.producer .config textarea {
+    height: 100%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+div.producer .data {
+    margin-right: 5px;
+    flex: 5;
+}
+
+div.producer .data textarea {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+div.producer .action {
+    flex: 1;
+    align-self: center;
+    text-align: center;
+}
+
+div.producer .action button {
+    width: 140px;
+}
+
+/*
+    Title
+*/
+.title {
+    margin-left: 5px;
+}
+
+/*
+    Subscribers
+*/
+
+.subscribers {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+/*
+    General
+*/
+
+.clear {
+    clear: both;
+}
+
+
+/*
+    Logs
+*/
+
+.log-viewer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    width: 90%;
+    height: 90%;
+    z-index: 999;
+}

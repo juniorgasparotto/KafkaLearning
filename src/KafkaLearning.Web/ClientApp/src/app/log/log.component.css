@@ -1,0 +1,13 @@
+.item {
+    background-color: #01162b;
+    padding: 5px;
+}
+
+.item.odd {
+    background-color: #03386e;
+}
+
+.time {
+    width: 100px;
+    display: inline-block;
+}

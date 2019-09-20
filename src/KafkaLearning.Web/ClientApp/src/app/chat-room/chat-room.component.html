@@ -1,0 +1,39 @@
+<div class="header">
+    <h3>Topic: {{consumerSettigns.topic}} ({{consumerSettigns.groupId}})</h3>
+</div>
+
+<div class="error" *ngIf="lastError">
+    {{lastError.message ? lastError.message : lastError }}
+</div>
+
+<div class="content">
+    <div class="config">
+        <div class="settings">
+            <textarea [(ngModel)]="consumerSettignsJson" [disabled]="this.loading || hasSubcribe"></textarea>
+        </div>
+
+        <div class="actions">
+            <button (click)="subscribe()" *ngIf="!hasSubcribe" [disabled]="this.loading">Subscribe</button>
+            <button (click)="unSubscribe()" *ngIf="hasSubcribe" [disabled]="this.loading">UnSubscribe</button>
+            <button (click)="clear()">Clear</button>
+        </div>
+    </div>
+
+    <div class="messages">
+        <div #scrollBottom class="scroll">
+            <ol class="list">
+                <li class="user-message" *ngFor="let message of messages" [ngClass]="{'msg-error': message.hasError}">
+                    <span>{{ message.message }} ({{ message.id }})</span>
+                    <!-- <ul>
+                    <li>SendDate: {{ message.sendDate }}</li>
+                    <li>ReceiveDate: {{ message.receiveDate }}</li>
+                  </ul> -->
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="footer" *ngIf="appInfo">
+    <span>TaskId: {{appInfo.taskId}}</span>
+</div>

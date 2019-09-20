@@ -1,0 +1,4 @@
+<div class="item" [ngClass]="log.type" [class.odd]="odd">
+    <span class="time">{{log.timestamp | date:'H:mm:ss'}}</span>
+    <span>{{log.messageTemplate.text}}</span>
+</div>
