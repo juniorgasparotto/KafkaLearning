@@ -9,12 +9,12 @@ namespace KafkaLearning.Web.Infrastructure.Configuration
 
         public class ProducersOptions
         {
-            public ProducerOptions Chat { get; set; }
+            public ProducerOptions TopicSample { get; set; }
         }
 
         public class ConsumersOptions
         {
-            public ConsumerOptions Chat { get; set; }
+            public ConsumerOptions TopicSample { get; set; }
         }
     }
 

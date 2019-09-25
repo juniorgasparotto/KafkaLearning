@@ -82,7 +82,7 @@ namespace KafkaLearning.Web
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/signalr/chat");
+                routes.MapHub<EventMessageHub>("/signalr/messages");
                 routes.MapHub<LogHub>("/signalr/logs");
             });
 

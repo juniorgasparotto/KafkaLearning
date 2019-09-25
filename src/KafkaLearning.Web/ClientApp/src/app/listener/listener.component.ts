@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import * as signalR from "@aspnet/signalr";
 
 @Component({
-  selector: 'app-chat-room',
-  templateUrl: './chat-room.component.html',
-  styleUrls: ['./chat-room.component.css'],
+  selector: 'app-listener',
+  templateUrl: './listener.component.html',
+  styleUrls: ['./listener.component.css'],
   host: {
     '[class.error]': 'lastError',
   },
 })
-export class ChatRoomComponent implements OnInit, AfterViewChecked {
+export class ListenerComponent implements OnInit, AfterViewChecked {
   public message: string;
   public consumerSettignsJson: string;
   public consumerSettigns: ConsumerSettigns;
-  public messages: ChatMessage[];
+  public messages: EventMessage[];
   private hubConnection: signalR.HubConnection;
   private hasSubcribe: boolean;
   private loading: boolean;
@@ -25,7 +25,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   private myScrollContainer: ElementRef;
 
   @Input()
-  public roomId: string;
+  public appName: string;
 
   @Input()
   public groupId: string;
@@ -49,7 +49,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
   ) {
-    this.messages = new Array<ChatMessage>();
+    this.messages = new Array<EventMessage>();
   }
 
   ngOnInit() {
@@ -57,7 +57,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   public setSettings() {
-    this.http.get<AppInfo[]>(this.baseUrl + `api/Chat/GetSubscribers?appName=${this.roomId}`).subscribe(
+    this.http.get<AppInfo[]>(this.baseUrl + `api/Server/GetSubscribers?appName=${this.appName}`).subscribe(
       result => {
         if (result.length > 0) {
           var appInfo = result[0];
@@ -110,10 +110,10 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     this.lastError = null;
     this.consumerSettigns = JSON.parse(this.consumerSettignsJson);
 
-    this.http.post<AppInfo>(this.baseUrl + `api/Chat/Subscribe?roomId=${this.roomId}&simulateError=${this.simulateError}`, this.consumerSettigns).subscribe(
+    this.http.post<AppInfo>(this.baseUrl + `api/Server/Subscribe?appName=${this.appName}&simulateError=${this.simulateError}`, this.consumerSettigns).subscribe(
       result => {
         this.appInfo = result;
-        this.listenChat();
+        this.listen();
       },
       error => {
         console.error(error);
@@ -127,7 +127,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     this.loading = true;
     this.lastError = null;
 
-    this.http.get(this.baseUrl + `api/Chat/UnSubscribe?roomId=${this.roomId}`).subscribe(
+    this.http.get(this.baseUrl + `api/Server/UnSubscribe?appName=${this.appName}`).subscribe(
       result => {
         this.hasSubcribe = false;
         try {
@@ -153,10 +153,10 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   public clear() {
-    this.messages = new Array<ChatMessage>();
+    this.messages = new Array<EventMessage>();
   }
 
-  private listenChat() {
+  private listen() {
     // Não conecta novamente se já estiver escrito, do contrário gera duplicação de ouvintes
     if (this.hasSubcribe) {
       this.loading = false;
@@ -164,7 +164,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     }
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.baseUrl + 'signalr/chat', {
+      .withUrl(this.baseUrl + 'signalr/messages', {
         // skipNegotiation: true,
         // transport: signalR.HttpTransportType.WebSockets
       })
@@ -180,17 +180,17 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       .then(() => {
         console.log('Connection started');
 
-        this.hubConnection.invoke("AddToGroup", this.roomId)
+        this.hubConnection.invoke("AddToGroup", this.appName)
           .then(() => {
             this.hasSubcribe = true;
             this.loading = false;
 
-            this.hubConnection.on('chat', (msg: ChatMessage) => {
+            this.hubConnection.on('message', (msg: EventMessage) => {
               console.log(msg);
               this.messages.push(msg);
             });
 
-            this.hubConnection.on('chatError', (msg: ChatMessage) => {
+            this.hubConnection.on('messageError', (msg: EventMessage) => {
               console.log(msg);
               msg.hasError = true;
               this.messages.push(msg);
@@ -210,7 +210,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   public setSimulateError() {
-    this.http.get(this.baseUrl + `api/Chat/EnableError?appName=${this.roomId}&value=${this.simulateError}`).subscribe(
+    this.http.get(this.baseUrl + `api/Server/EnableError?appName=${this.appName}&value=${this.simulateError}`).subscribe(
       result => {
       },
       error => {
@@ -234,12 +234,12 @@ interface AppInfo {
   settings: ConsumerSettigns;
 }
 
-interface ChatMessage {
+interface EventMessage {
   id: string;
   sendDate: Date;
   receiveDate: Date;
   message: string;
-  roomId: string;
+  appName: string;
   hasError: boolean;
 }
 

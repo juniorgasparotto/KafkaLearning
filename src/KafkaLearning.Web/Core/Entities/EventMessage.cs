@@ -2,7 +2,7 @@ using System;
 
 namespace KafkaLearning.Web.Core.Entities
 {
-    public class ChatMessage
+    public class EventMessage
     {
         public Guid Id { get; set; }
         public DateTime SendDate { get; set; }

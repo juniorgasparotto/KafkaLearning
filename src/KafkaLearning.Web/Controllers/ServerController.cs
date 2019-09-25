@@ -26,19 +26,19 @@ using System.Linq;
 namespace KafkaLearning.Web.Controllers
 {
     [Route("api/[controller]")]
-    public partial class ChatController : Controller
+    public partial class ServerController : Controller
     {
         private static ConcurrentDictionary<string, AppInfo> subscribersCancels = new ConcurrentDictionary<string, AppInfo>();
 
-        private readonly IHubContext<ChatHub> _kafkaHubContext;
+        private readonly IHubContext<EventMessageHub> _kafkaHubContext;
         private readonly IHubContext<LogHub> _logHubContext;
         private readonly AppConfigurationOptions _appConfiguration;
-        private readonly ILogger<ChatController> _logger;
+        private readonly ILogger<ServerController> _logger;
 
-        public ChatController(
-            ILogger<ChatController> logger,
+        public ServerController(
+            ILogger<ServerController> logger,
             IOptions<AppConfigurationOptions> appConfiguration,
-            IHubContext<ChatHub> kafkaHubContext,
+            IHubContext<EventMessageHub> kafkaHubContext,
             IHubContext<LogHub> logHubContext
         )
         {
@@ -81,13 +81,13 @@ namespace KafkaLearning.Web.Controllers
             request.Message.SendDate = DateTime.Now;
 
             // Create producer
-            var builder = new ProducerConnectionBuilder<Guid, ChatMessage>();
+            var builder = new ProducerConnectionBuilder<Guid, EventMessage>();
             var producer = builder
                             .WithBootstrapServers(request.Settings.BootstrapServers)
                             .WithAsyncProducer()
                             .WithJsonSerializer()
                             .Build();
-            var producerSender = new ProducerAsyncSender<Guid, ChatMessage>(
+            var producerSender = new ProducerAsyncSender<Guid, EventMessage>(
                 producer,
                 null,
                 logger
@@ -98,18 +98,18 @@ namespace KafkaLearning.Web.Controllers
 
         [HttpPost("[action]")]
         public IActionResult Subscribe(
-            string roomId,
+            string appName,
             bool simulateError,
             [FromBody]ConsumerOptions settings,
             [FromServices] IServiceBusLogger loggerServiceBus,
-            [FromServices] ILogger<SendSignalRMessageConsumerClient> loggerSignalR
+            [FromServices] ILogger<SignalRConsumerClient> loggerSignalR
         )
         {
-            if (!subscribersCancels.ContainsKey(roomId))
+            if (!subscribersCancels.ContainsKey(appName))
             {
-                TopicConsumer<Guid, ChatMessage> topicConsumer;
+                TopicConsumer<Guid, EventMessage> topicConsumer;
                 var cancelSource = new CancellationTokenSource();
-                var builder = new ConsumerConnectionBuilder<Guid, ChatMessage>();
+                var builder = new ConsumerConnectionBuilder<Guid, EventMessage>();
                 builder.WithBrokers(settings.BootstrapServers);
                 builder.WithTopic(settings.Topic);
                 builder.WithGroupId(settings.GroupId);
@@ -122,13 +122,13 @@ namespace KafkaLearning.Web.Controllers
 
                 var appInfo = new AppInfo
                 {
-                    AppName = roomId,
+                    AppName = appName,
                     CancellationToken = cancelSource,
                     SimulateError = simulateError,
                     Settings = settings
                 };
 
-                var client = new SendSignalRMessageConsumerClient(appInfo, _kafkaHubContext, loggerSignalR);
+                var client = new SignalRConsumerClient(appInfo, _kafkaHubContext, loggerSignalR);
 
                 switch (settings.RetryStrategy)
                 {
@@ -146,20 +146,20 @@ namespace KafkaLearning.Web.Controllers
                 var task = topicConsumer.Run(cancelSource.Token);
 
                 appInfo.TaskId = task.Id;
-                subscribersCancels.TryAdd(roomId, appInfo);
+                subscribersCancels.TryAdd(appName, appInfo);
                 return Ok(appInfo);
             }
 
-            return Ok(subscribersCancels[roomId]);
+            return Ok(subscribersCancels[appName]);
         }
 
         [HttpGet("[action]")]
-        public void UnSubscribe(string roomId)
+        public void UnSubscribe(string appName)
         {
-            if (subscribersCancels.ContainsKey(roomId))
+            if (subscribersCancels.ContainsKey(appName))
             {
-                subscribersCancels[roomId].CancellationToken.Cancel();
-                subscribersCancels.TryRemove(roomId, out _);
+                subscribersCancels[appName].CancellationToken.Cancel();
+                subscribersCancels.TryRemove(appName, out _);
             }
         }
 

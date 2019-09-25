@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChatRoomComponent } from '../chat-room/chat-room.component';
+import { ListenerComponent } from '../listener/listener.component';
 import { LogComponent } from '../log/log.component';
 
 
@@ -10,8 +10,8 @@ import { LogComponent } from '../log/log.component';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  @ViewChildren(ChatRoomComponent)
-  rooms: QueryList<ChatRoomComponent>
+  @ViewChildren(ListenerComponent)
+  listeners: QueryList<ListenerComponent>
 
   @ViewChildren(LogComponent)
   logs: LogComponent
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
       }
     };
 
-    this.http.post<Boolean>(this.baseUrl + `api/Chat/Send`, request).subscribe(
+    this.http.post<Boolean>(this.baseUrl + `api/Server/Send`, request).subscribe(
       result => {
 
       },
@@ -55,19 +55,19 @@ export class HomeComponent implements OnInit {
   }
 
   public subscribeAll() {
-    var array = this.rooms.toArray();
+    var array = this.listeners.toArray();
     for (var i in array)
       array[i].subscribe();
   }
 
   public unSubscribeAll() {
-    var array = this.rooms.toArray();
+    var array = this.listeners.toArray();
     for (var i in array)
       array[i].unSubscribe();
   }
 
   public clearAll() {
-    var array = this.rooms.toArray();
+    var array = this.listeners.toArray();
     for (var i in array)
       array[i].clear();
   }

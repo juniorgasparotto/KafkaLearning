@@ -23,7 +23,7 @@ export class LogViewerComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.http.get(this.baseUrl + `api/Chat/SubscribeLogs`).subscribe(
+    // this.http.get(this.baseUrl + `api/Server/SubscribeLogs`).subscribe(
     //   result => {
     //     this.listenLogs();
     //   },
@@ -37,7 +37,7 @@ export class LogViewerComponent implements OnInit {
 
   private update() {
     this.loading = true;
-    this.http.get<Array<LogEvent>>(this.baseUrl + `api/Chat/GetAllLogs`).subscribe(result => {
+    this.http.get<Array<LogEvent>>(this.baseUrl + `api/Server/GetAllLogs`).subscribe(result => {
       this.logs = result;
       this.loading = false;
     }, error => {
