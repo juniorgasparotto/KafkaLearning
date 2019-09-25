@@ -21,6 +21,7 @@ using KafkaLearning.Web.Infrastructure;
 using KafkaLearning.Web.Infrastructure.Configurations;
 using KafkaLearning.Web.Infrastructure.ConsumersClients;
 using KafkaLearning.Web.Infrastructure.ViewModel;
+using System.Linq;
 
 namespace KafkaLearning.Web.Controllers
 {
@@ -49,9 +50,10 @@ namespace KafkaLearning.Web.Controllers
 
 
         [HttpGet("[action]")]
-        public void EnableError(bool enable)
+        public void EnableError(string appName, bool value)
         {
-            SendSignalRMessageConsumerClient.EnableTestError = enable;
+            if (subscribersCancels.ContainsKey(appName))
+                subscribersCancels[appName].SimulateError = value;
         }
 
         [HttpGet("[action]")]
@@ -63,11 +65,10 @@ namespace KafkaLearning.Web.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<string> GetAllSubscribers()
+        public IEnumerable<AppInfo> GetSubscribers(string appName = null)
         {
-            return subscribersCancels.Keys;
+            return subscribersCancels.Values.Where(f=> appName == null || f.AppName == appName);
         }
-
 
         [HttpPost("[action]")]
         public async void Send(
@@ -98,6 +99,7 @@ namespace KafkaLearning.Web.Controllers
         [HttpPost("[action]")]
         public IActionResult Subscribe(
             string roomId,
+            bool simulateError,
             [FromBody]ConsumerOptions settings,
             [FromServices] IServiceBusLogger loggerServiceBus,
             [FromServices] ILogger<SendSignalRMessageConsumerClient> loggerSignalR
@@ -118,7 +120,15 @@ namespace KafkaLearning.Web.Controllers
                 //builder.MaxPollIntervalMs(settings.MaxPollIntervalMs);
                 builder.WithJsonSerializer();
 
-                var client = new SendSignalRMessageConsumerClient(settings, roomId, _kafkaHubContext, loggerSignalR);
+                var appInfo = new AppInfo
+                {
+                    AppName = roomId,
+                    CancellationToken = cancelSource,
+                    SimulateError = simulateError,
+                    Settings = settings
+                };
+
+                var client = new SendSignalRMessageConsumerClient(appInfo, _kafkaHubContext, loggerSignalR);
 
                 switch (settings.RetryStrategy)
                 {
@@ -134,13 +144,8 @@ namespace KafkaLearning.Web.Controllers
                 }
 
                 var task = topicConsumer.Run(cancelSource.Token);
-                var appInfo = new AppInfo
-                {
-                    AppName = roomId,
-                    CancellationToken = cancelSource,
-                    TaskId = task.Id
-                };
 
+                appInfo.TaskId = task.Id;
                 subscribersCancels.TryAdd(roomId, appInfo);
                 return Ok(appInfo);
             }

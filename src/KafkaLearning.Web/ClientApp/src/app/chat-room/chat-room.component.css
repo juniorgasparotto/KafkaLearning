@@ -59,6 +59,20 @@
             border: none;            
             outline: none;
         }
+    
+        .content .config .options {
+            display: inline-block;
+        }
+
+            .content .config .options span {
+                vertical-align: middle;
+                font-size: 12px;
+            }
+
+            .content .config .options input {
+                vertical-align: middle;
+            }
+        
 
     .content .messages {
         /* background-color: indigo; */

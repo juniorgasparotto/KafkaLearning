@@ -42,6 +42,9 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   @Input()
   public delay: number;
 
+  @Input()
+  public simulateError: boolean;
+
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string
@@ -50,6 +53,33 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.setSettings();
+  }
+
+  public setSettings() {
+    this.http.get<AppInfo[]>(this.baseUrl + `api/Chat/GetSubscribers?appName=${this.roomId}`).subscribe(
+      result => {
+        if (result.length > 0) {
+          var appInfo = result[0];
+          this.simulateError = appInfo.simulateError;
+          this.consumerSettigns = appInfo.settings;
+          this.consumerSettignsJson = JSON.stringify(this.consumerSettigns, null, 2);
+          this.subscribe();
+        }
+        else {
+          this.setSettingsDefault();
+        }
+      },
+      error => {
+        console.error(error);
+        this.lastError = error;
+
+        this.setSettingsDefault();
+      }
+    );
+  }
+
+  private setSettingsDefault() {
     this.consumerSettigns = {
       bootstrapServers: "localhost:9092",
       groupId: this.groupId,
@@ -61,7 +91,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       retryStrategy: this.retryStrategy,
       delay: this.delay
     };
-
+    
     if (!this.retryTopic)
       delete this.consumerSettigns.retryTopic;
 
@@ -80,7 +110,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     this.lastError = null;
     this.consumerSettigns = JSON.parse(this.consumerSettignsJson);
 
-    this.http.post<AppInfo>(this.baseUrl + `api/Chat/Subscribe?roomId=${this.roomId}`, this.consumerSettigns).subscribe(
+    this.http.post<AppInfo>(this.baseUrl + `api/Chat/Subscribe?roomId=${this.roomId}&simulateError=${this.simulateError}`, this.consumerSettigns).subscribe(
       result => {
         this.appInfo = result;
         this.listenChat();
@@ -94,9 +124,6 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
   }
 
   public unSubscribe() {
-    if (!this.hasSubcribe)
-      return;
-
     this.loading = true;
     this.lastError = null;
 
@@ -112,7 +139,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
             });
         }
         catch (e) {
-          this.lastError = e;
+          // this.lastError = e;
         }
 
         this.loading = false;
@@ -137,7 +164,7 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
     }
 
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:5001/signalr/chat', {
+      .withUrl(this.baseUrl + 'signalr/chat', {
         // skipNegotiation: true,
         // transport: signalR.HttpTransportType.WebSockets
       })
@@ -182,6 +209,17 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  public setSimulateError() {
+    this.http.get(this.baseUrl + `api/Chat/EnableError?appName=${this.roomId}&value=${this.simulateError}`).subscribe(
+      result => {
+      },
+      error => {
+        console.error(error);
+        this.lastError = error;
+      }
+    );
+  }
+
   scrollToBottom(): void {
     try {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
@@ -192,6 +230,8 @@ export class ChatRoomComponent implements OnInit, AfterViewChecked {
 interface AppInfo {
   appName: string;
   taskId: string;
+  simulateError: boolean;
+  settings: ConsumerSettigns;
 }
 
 interface ChatMessage {

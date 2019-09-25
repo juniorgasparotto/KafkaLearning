@@ -10,6 +10,9 @@ div.actions {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
+    position: fixed;
+    top: 0;
+    z-index: 99999;
 }
 
 div.logo {
@@ -35,6 +38,7 @@ div.producer {
     padding: 5px;
     box-sizing: border-box;
     display: flex;
+    margin-top: 60px;
 }
 
 div.producer .config {
@@ -107,5 +111,5 @@ div.producer .action button {
     transform: translateY(-50%) translateX(-50%);
     width: 90%;
     height: 90%;
-    z-index: 999;
+    z-index: 999999;
 }

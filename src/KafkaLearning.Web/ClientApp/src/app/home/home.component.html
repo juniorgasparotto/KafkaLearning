@@ -41,26 +41,26 @@
         <h3>Model: Always goes back to the main topic and in case of error sends to the next error topic until arriving at DQL</h3>
     </div>
     <div class="subscribers">
-        <app-chat-room roomId="room1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq"></app-chat-room>
-        <app-chat-room roomId="room2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq"></app-chat-room>
+        <app-chat-room roomId="room1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-chat-room>
+        <app-chat-room roomId="room2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-chat-room>
 
-        <app-chat-room roomId="room3" groupId="g1" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000">
+        <app-chat-room roomId="room3" groupId="g1" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true">
         </app-chat-room>
-        <app-chat-room roomId="room4" groupId="g2" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000">
-        </app-chat-room>
-
-        <app-chat-room roomId="room5" groupId="g1" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000">
-        </app-chat-room>
-        <app-chat-room roomId="room6" groupId="g2" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000">
+        <app-chat-room roomId="room4" groupId="g2" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true">
         </app-chat-room>
 
-        <app-chat-room roomId="room7" groupId="g1" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000">
+        <app-chat-room roomId="room5" groupId="g1" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true">
         </app-chat-room>
-        <app-chat-room roomId="room8" groupId="g2" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000">
+        <app-chat-room roomId="room6" groupId="g2" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true">
         </app-chat-room>
 
-        <app-chat-room roomId="room9" groupId="g1" topic="Chat.dlq"></app-chat-room>
-        <app-chat-room roomId="room10" groupId="g2" topic="Chat.dlq"></app-chat-room>
+        <app-chat-room roomId="room7" groupId="g1" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true">
+        </app-chat-room>
+        <app-chat-room roomId="room8" groupId="g2" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true">
+        </app-chat-room>
+
+        <app-chat-room roomId="room9" groupId="g1" topic="Chat.dlq" simulateError="false"></app-chat-room>
+        <app-chat-room roomId="room10" groupId="g2" topic="Chat.dlq" simulateError="false"></app-chat-room>
     </div>
 </div>
 
@@ -78,25 +78,25 @@
     </div>
 
     <div class="subscribers">
-        <app-chat-room roomId="room1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1"></app-chat-room>
-        <app-chat-room roomId="room2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1"></app-chat-room>
+        <app-chat-room roomId="room1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-chat-room>
+        <app-chat-room roomId="room2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-chat-room>
 
-        <app-chat-room roomId="room3" groupId="g1" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000">
+        <app-chat-room roomId="room3" groupId="g1" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true">
         </app-chat-room>
-        <app-chat-room roomId="room4" groupId="g2" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000">
-        </app-chat-room>
-
-        <app-chat-room roomId="room5" groupId="g1" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000">
-        </app-chat-room>
-        <app-chat-room roomId="room6" groupId="g2" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000">
+        <app-chat-room roomId="room4" groupId="g2" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true">
         </app-chat-room>
 
-        <app-chat-room roomId="room7" groupId="g1" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000">
+        <app-chat-room roomId="room5" groupId="g1" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true">
         </app-chat-room>
-        <app-chat-room roomId="room8" groupId="g2" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000">
+        <app-chat-room roomId="room6" groupId="g2" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true">
         </app-chat-room>
 
-        <app-chat-room roomId="room9" groupId="g1" topic="Chat.dlq"></app-chat-room>
-        <app-chat-room roomId="room10" groupId="g2" topic="Chat.dlq"></app-chat-room>
+        <app-chat-room roomId="room7" groupId="g1" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true">
+        </app-chat-room>
+        <app-chat-room roomId="room8" groupId="g2" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true">
+        </app-chat-room>
+
+        <app-chat-room roomId="room9" groupId="g1" topic="Chat.dlq" simulateError="false"></app-chat-room>
+        <app-chat-room roomId="room10" groupId="g2" topic="Chat.dlq" simulateError="false"></app-chat-room>
     </div>
 </div>
