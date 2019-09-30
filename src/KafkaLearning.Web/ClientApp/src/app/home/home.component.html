@@ -2,11 +2,16 @@
     <app-log-viewer (close)="closeLogs()"></app-log-viewer>
 </div>
 
+<div class="log-viewer" *ngIf="viewScenarios">
+    <app-modal-scenarios (close)="closeScenarios()" (change)="changeScenario($event)"></app-modal-scenarios>
+</div>
+
 <div class="actions">
     <div class="logo">
         <img src="/assets/logo.png" />
     </div>
     <div class="buttons">
+        <button (click)="openScenarios()" class="btn-change">Change Scenario</button>
         <button (click)="subscribeAll()">Subscribe All</button>
         <button (click)="unSubscribeAll()">UnSubscribe All</button>
         <button (click)="clearAll()">Clear all</button>
@@ -24,79 +29,14 @@
     </div>
 
     <div class="action">
-        <button (click)="send()">Send</button>
+        <button (click)="sendMessage()">Send</button>
     </div>
 </div>
 
-<!--
-    Modelo: X
-    Link: https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722
-          https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
-    Prós:
-    Contras:
--->
-
-<div *ngIf="!uberModel">
-    <div class="title">
-        <h3>Model: Always goes back to the main topic and in case of error sends to the next error topic until arriving at DQL</h3>
-    </div>
-    <div class="subscribers">
-        <app-listener appName="app1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>
-        <app-listener appName="app2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>
-
-        <app-listener appName="app3" groupId="g1" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app4" groupId="g2" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app5" groupId="g1" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app6" groupId="g2" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app7" groupId="g1" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app8" groupId="g2" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app9" groupId="g1" topic="Chat.dlq" simulateError="false"></app-listener>
-        <app-listener appName="app10" groupId="g2" topic="Chat.dlq" simulateError="false"></app-listener>
-    </div>
+<div class="title">
+    <h3>{{title}}</h3>
 </div>
 
-<!--
-    Modelo: UBER
-    Link: https://eng.uber.com/reliable-reprocessing/
-          https://imasters.com.br/desenvolvimento/construindo-reprocessamento-confiavel-e-dead-letter-queues-com-kafka
-    Prós:
-    Contras:
--->
-
-<div *ngIf="uberModel">
-    <div class="title">
-        <h3>Model: Always go to next retry topic until DLQ</h3>
-    </div>
-
-    <div class="subscribers">
-        <app-listener appName="app1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-listener>
-        <app-listener appName="app2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-listener>
-
-        <app-listener appName="app3" groupId="g1" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app4" groupId="g2" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app5" groupId="g1" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app6" groupId="g2" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app7" groupId="g1" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true">
-        </app-listener>
-        <app-listener appName="app8" groupId="g2" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true">
-        </app-listener>
-
-        <app-listener appName="app9" groupId="g1" topic="Chat.dlq" simulateError="false"></app-listener>
-        <app-listener appName="app10" groupId="g2" topic="Chat.dlq" simulateError="false"></app-listener>
-    </div>
+<div class="scenarios">
+    <ng-template #scenarios></ng-template>
 </div>

@@ -3,6 +3,15 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "Debug (.NET Core + TypeScript)",
+            "configurations": [
+                ".NET (web)",
+                "Typescript (Web)"
+            ]
+        }
+    ],
     "configurations": [
         {
             "name": ".NET (web)",

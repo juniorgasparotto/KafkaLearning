@@ -1,0 +1,23 @@
+<!--
+    Modelo: X
+    Link: https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722
+          https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
+    Prós:
+    Contras:
+-->
+<div class="subscribers">
+  <app-listener appName="app1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>
+  <app-listener appName="app2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.1" groupId="g1" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.1" groupId="g2" topic="Chat.retry.1" retryStrategy="redirect" retryTopic="Chat" delay="2000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.2" groupId="g1" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.2" groupId="g2" topic="Chat.retry.2" retryStrategy="redirect" retryTopic="Chat" delay="4000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.3" groupId="g1" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.3" groupId="g2" topic="Chat.retry.3" retryStrategy="redirect" retryTopic="Chat" delay="6000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.dlq" groupId="g1" topic="Chat.dlq" simulateError="false"></app-listener>
+  <app-listener appName="app2.dlq" groupId="g2" topic="Chat.dlq" simulateError="false"></app-listener>
+</div>

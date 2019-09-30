@@ -220,6 +220,10 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
     );
   }
 
+  public isSubscribe() : boolean {
+    return this.hasSubcribe;
+  }
+
   scrollToBottom(): void {
     try {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;

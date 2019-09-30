@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit, Input, ViewChildren, QueryList } from '@angular/core';
+import { Component, Inject, OnInit, ComponentFactoryResolver, ViewContainerRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ListenerComponent } from '../listener/listener.component';
-import { LogComponent } from '../log/log.component';
+import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
+import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
 
 
 @Component({
@@ -10,20 +10,25 @@ import { LogComponent } from '../log/log.component';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  @ViewChildren(ListenerComponent)
-  listeners: QueryList<ListenerComponent>
-
-  @ViewChildren(LogComponent)
-  logs: LogComponent
-
-  private uberModel: boolean = true;
+  @ViewChild('scenarios', { read: ViewContainerRef })
+  viewContainerRefScenarios: ViewContainerRef
 
   public message: string;
   public publisherSettigns: string;
   public viewLogs: boolean;
+  public viewScenarios: boolean;
+  private title: string;
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) {
+  private scenarios: any[] = new Array<any>();
+  private currentScenario: any;
 
+  constructor(
+    private http: HttpClient,
+    @Inject('BASE_URL') private baseUrl: string,
+    @Inject(ComponentFactoryResolver) private factoryResolver
+  ) {
+    this.scenarios.push(ScenarioRetryMainTopicComponent);
+    this.scenarios.push(ScenarioRetryMainTopicComponent);
   }
 
   ngOnInit(): void {
@@ -31,17 +36,30 @@ export class HomeComponent implements OnInit {
       "BootstrapServers": "localhost:9092",
       "Topic": "Chat"
     }, null, 2);
+
+    var scenario = localStorage.getItem('currentScenario');
+    if (!scenario) {
+      scenario = ScenarioRetryMainTopicComponent.NAME;
+    }   
+
+    this.changeScenario(scenario);
   }
 
-  public send() {
-    this.sendMessage(this.message);
+  addScenarioComponent(componentScenario: any) {
+    this.title = componentScenario.TITLE;
+    this.viewContainerRefScenarios.clear();
+
+    const factory = this.factoryResolver.resolveComponentFactory(componentScenario);
+    const component = factory.create(this.viewContainerRefScenarios.parentInjector);
+    this.viewContainerRefScenarios.insert(component.hostView);
+    this.currentScenario = component._component;
   }
 
-  private sendMessage(_message: string) {
+  sendMessage() {
     var request = {
       settings: JSON.parse(this.publisherSettigns),
       message: {
-        message: _message
+        message: this.message
       }
     };
 
@@ -55,21 +73,15 @@ export class HomeComponent implements OnInit {
   }
 
   public subscribeAll() {
-    var array = this.listeners.toArray();
-    for (var i in array)
-      array[i].subscribe();
+    this.currentScenario.subscribeAll();
   }
 
   public unSubscribeAll() {
-    var array = this.listeners.toArray();
-    for (var i in array)
-      array[i].unSubscribe();
+    this.currentScenario.unSubscribeAll();
   }
 
   public clearAll() {
-    var array = this.listeners.toArray();
-    for (var i in array)
-      array[i].clear();
+    this.currentScenario.clearAll();  
   }
 
   showLogs() {
@@ -80,4 +92,31 @@ export class HomeComponent implements OnInit {
     this.viewLogs = false;
   }
 
+  openScenarios() {
+    this.viewScenarios = true;
+  }
+
+  closeScenarios() {
+    this.viewScenarios = false;
+  }
+
+  changeScenario(scenario: string) {
+    if (this.currentScenario && this.currentScenario.hasSomeSubscribe()) {
+      alert("Stop all listeners to change.");
+      return;
+    }
+
+    this.closeScenarios();
+
+    localStorage.setItem('currentScenario', scenario);
+    
+    switch (scenario) {
+      case ScenarioRetryNextTopicComponent.NAME:
+        this.addScenarioComponent(ScenarioRetryNextTopicComponent);
+        break;
+      case ScenarioRetryMainTopicComponent.NAME:
+        this.addScenarioComponent(ScenarioRetryMainTopicComponent);
+        break;
+    }
+  }
 }

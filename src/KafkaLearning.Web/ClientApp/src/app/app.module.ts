@@ -10,7 +10,10 @@ import { ListenerComponent } from './listener/listener.component';
 import { LogComponent } from './log/log.component';
 import { LogService } from './services/log.service';
 import { LogViewerComponent } from './log-viewer/log-viewer.component';
-import {NgPipesModule} from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
+import { ScenarioRetryNextTopicComponent } from './scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
+import { ScenarioRetryMainTopicComponent } from './scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
+import { ModalScenariosComponent } from './modal-scenarios/modal-scenarios.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,14 @@ import {NgPipesModule} from 'ngx-pipes';
     HomeComponent,
     ListenerComponent,
     LogComponent,
-    LogViewerComponent
+    LogViewerComponent,
+    ModalScenariosComponent,
+    ScenarioRetryNextTopicComponent,
+    ScenarioRetryMainTopicComponent,
+  ],
+  entryComponents: [
+    ScenarioRetryNextTopicComponent,
+    ScenarioRetryMainTopicComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

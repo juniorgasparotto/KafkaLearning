@@ -1,0 +1,23 @@
+<!--
+    Modelo: UBER
+    Link: https://eng.uber.com/reliable-reprocessing/
+          https://imasters.com.br/desenvolvimento/construindo-reprocessamento-confiavel-e-dead-letter-queues-com-kafka
+    Prós:
+    Contras:
+-->
+<div class="subscribers">
+  <app-listener appName="app1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-listener>
+  <app-listener appName="app2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.1" groupId="g1" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.1" groupId="g2" topic="Chat.retry.1" retryStrategy="retry" retryTopic="Chat.retry.2" delay="1000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.2" groupId="g1" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.2" groupId="g2" topic="Chat.retry.2" retryStrategy="retry" retryTopic="Chat.retry.3" delay="4000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.retry.3" groupId="g1" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true"></app-listener>
+  <app-listener appName="app2.retry.3" groupId="g2" topic="Chat.retry.3" retryStrategy="retry" retryTopic="Chat.dlq" delay="6000" simulateError="true"></app-listener>
+
+  <app-listener appName="app1.dlq" groupId="g1" topic="Chat.dlq" simulateError="false"></app-listener>
+  <app-listener appName="app2.dlq" groupId="g2" topic="Chat.dlq" simulateError="false"></app-listener>
+</div>
