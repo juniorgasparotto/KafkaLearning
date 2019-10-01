@@ -1,59 +1,21 @@
 <div class="modal">
   <div class="left">
-    <div #tab1 class="title-scenario" [class.active]="tabs[ScenarioRetryMainTopicComponent.NAME]" (click)="activeTab(ScenarioRetryMainTopicComponent.NAME)">{{ScenarioRetryMainTopicComponent.TITLE}}</div>
-    <div #tab2 class="title-scenario" [class.active]="tabs[ScenarioRetryNextTopicComponent.NAME]" (click)="activeTab(ScenarioRetryNextTopicComponent.NAME)">{{ScenarioRetryNextTopicComponent.TITLE}}</div>
+    <div 
+      *ngFor="let t of tabs" 
+      class="title-scenario" 
+      (click)="activeTab(t)" 
+      [class.active]="isActiveTab(t)">{{getTabTitle(t, lang)}}</div>
   </div>
 
   <div class="right">
-    <!-- Scenario 1: Retry main topic -->
-    <div *ngIf="tabs[ScenarioRetryMainTopicComponent.NAME]">
-      <h1>{{ScenarioRetryMainTopicComponent.TITLE}}</h1>
-
-      <ol>
-        <li>Clicar no botão "Subscribe all" para ligar todos os "ouvintes"</li>
-        <li>Manter marcado o checkbox "" em todos os "ouvintes" para que possa simular o erro</li>
-      </ol>
+    <div class="languages">
+      <img src="/assets/en-us.png" (click)="lang=null" />
+      <img src="/assets/pt-br.png" (click)="lang='pt-br'" />
     </div>
-
-    <!-- Scenario 2: Retry next topic -->
-    <div *ngIf="tabs[ScenarioRetryNextTopicComponent.NAME]">
-      <h1>{{ScenarioRetryNextTopicComponent.TITLE}}</h1>
-
-      <p>Nesse cenário, temos duas aplicações distintas (App1 e App2) que simulam duas APIs de diferentes propósitos que
-        "escutam" o mesmo tópico (Chat).</p>
-      <p>A ideia deste cenário é demostrar uma forma de retry no qual uma mensagem que gerou um erro seja encaminhada
-        para um outro tópico (Chat.retry.1) para ser lida novamente. Cada tópico de retry deve ter um delay exponencial
-        para evitar gargalo.</p>
-      <p>Nesse exemplo, temos 3 tentativas, cada uma com o delay maior que o outro. Caso nenhuma tentativa consiga
-        processar a mensagem então essa mensagem deve ir para o tópico final: DLQ (Dead letter queue).</p>
-      <p>A parte negativa dessa implementação é que será necessário triplicar a infraestrutura do tópico principal para
-        todos os tópicos de retentativas, ou seja, eles deverão ter acesso a banco de dados ou qualquer outro acesso.
-      </p>
-
-      <p>
-        Abaixo, temos alguns links de referência desse modelo:
-      </p>
-
-      <ul>
-        <li>
-          <a target="blank"
-            href="https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722">Referência
-            1</a>
-        </li>
-        <li>
-          <a target="blank"
-            href="https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a">Referência
-            2</a>
-        </li>
-      </ul>
-
-      <p>Segue os passos para reproduzir o cenário:</p>
-
-      <ol>
-        <li>Clicar no botão "Subscribe all" para ligar todos os "ouvintes"</li>
-        <li>Manter marcado o checkbox "" em todos os "ouvintes" para que possa simular o erro</li>
-      </ol>
-
+    
+    <div>
+      <h1>{{getCurrentTabTitle(lang)}}</h1>
+      <html-include [htmlUrl]="getCurrentTabUrlDescription(lang)"></html-include>
     </div>
   </div>
 </div>

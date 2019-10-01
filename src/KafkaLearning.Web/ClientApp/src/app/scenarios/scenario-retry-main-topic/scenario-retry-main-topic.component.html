@@ -1,10 +1,3 @@
-<!--
-    Modelo: X
-    Link: https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722
-          https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
-    Prós:
-    Contras:
--->
 <div class="subscribers">
   <app-listener appName="app1" groupId="g1" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>
   <app-listener appName="app2" groupId="g2" topic="Chat" retryStrategy="retry" retryTopic="Chat.retry.1;Chat.retry.2;Chat.retry.3;Chat.dlq" simulateError="true"></app-listener>

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ComponentFactoryResolver, ViewContainerRef, 
 import { HttpClient } from '@angular/common/http';
 import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
+import { ModalScenariosComponent } from '../modal-scenarios/modal-scenarios.component';
 
 
 @Component({
@@ -37,10 +38,10 @@ export class HomeComponent implements OnInit {
       "Topic": "Chat"
     }, null, 2);
 
-    var scenario = localStorage.getItem('currentScenario');
+    var scenario = ModalScenariosComponent.getComponentByName(localStorage.getItem('currentScenario'));
     if (!scenario) {
-      scenario = ScenarioRetryMainTopicComponent.NAME;
-    }   
+      scenario = ScenarioRetryMainTopicComponent;
+    }
 
     this.changeScenario(scenario);
   }
@@ -81,7 +82,7 @@ export class HomeComponent implements OnInit {
   }
 
   public clearAll() {
-    this.currentScenario.clearAll();  
+    this.currentScenario.clearAll();
   }
 
   showLogs() {
@@ -100,23 +101,14 @@ export class HomeComponent implements OnInit {
     this.viewScenarios = false;
   }
 
-  changeScenario(scenario: string) {
+  changeScenario(scenarioComponent: any) {
     if (this.currentScenario && this.currentScenario.hasSomeSubscribe()) {
       alert("Stop all listeners to change.");
       return;
     }
 
     this.closeScenarios();
-
-    localStorage.setItem('currentScenario', scenario);
-    
-    switch (scenario) {
-      case ScenarioRetryNextTopicComponent.NAME:
-        this.addScenarioComponent(ScenarioRetryNextTopicComponent);
-        break;
-      case ScenarioRetryMainTopicComponent.NAME:
-        this.addScenarioComponent(ScenarioRetryMainTopicComponent);
-        break;
-    }
+    this.addScenarioComponent(scenarioComponent);
+    localStorage.setItem('currentScenario', scenarioComponent.name);
   }
 }

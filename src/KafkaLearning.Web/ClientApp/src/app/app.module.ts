@@ -14,6 +14,7 @@ import { NgPipesModule } from 'ngx-pipes';
 import { ScenarioRetryNextTopicComponent } from './scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
 import { ScenarioRetryMainTopicComponent } from './scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ModalScenariosComponent } from './modal-scenarios/modal-scenarios.component';
+import { HtmlIncludeComponent } from './html-include/html-include.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ModalScenariosComponent } from './modal-scenarios/modal-scenarios.compo
     ModalScenariosComponent,
     ScenarioRetryNextTopicComponent,
     ScenarioRetryMainTopicComponent,
+    HtmlIncludeComponent
   ],
   entryComponents: [
     ScenarioRetryNextTopicComponent,

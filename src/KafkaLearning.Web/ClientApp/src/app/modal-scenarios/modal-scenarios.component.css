@@ -41,7 +41,21 @@
     font-size: 12px;
     padding: 0 20px 0px 20px;
     box-sizing: border-box;
+    overflow: auto;
 }
+    .right h1 {
+        margin-top: 1px;
+    }
+
+    .right .languages {
+        text-align: right;
+        margin-top: 10px;
+        height: 21px;
+    }
+
+        .right .languages img {
+            cursor: pointer;
+        }
 
 .buttons {
     position: absolute;

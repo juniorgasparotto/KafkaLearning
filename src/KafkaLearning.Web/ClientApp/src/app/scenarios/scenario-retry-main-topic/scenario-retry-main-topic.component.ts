@@ -7,8 +7,9 @@ import { ListenerComponent } from '../../listener/listener.component';
   styleUrls: ['./scenario-retry-main-topic.component.css']
 })
 export class ScenarioRetryMainTopicComponent implements OnInit {
-  public static NAME: string = "ScenarioRetryMainTopicComponent";
+  public static FOLDER: string = "scenario-retry-main-topic";
   public static TITLE: string = "Retry: Always goes back to the main topic and in case of error sends to the next error topic until arriving at DQL";
+  public static TITLE_PT_BR: string = "Retry: Sempre volta ao tópico principal e, em caso de erro, envia para o próximo tópico de erro até chegar ao DQL";
 
   @ViewChildren(ListenerComponent)
   listeners: QueryList<ListenerComponent>;

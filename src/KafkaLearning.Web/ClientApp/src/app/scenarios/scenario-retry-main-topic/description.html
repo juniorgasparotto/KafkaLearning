@@ -1,0 +1,42 @@
+<p>In this scenario, we have two distinct applications (App1 and App2) that simulate two different purpose APIs that
+    "listen" to the same topic (Chat).</p>
+
+<p>Each of the apps has its own consumer group (g1 and g2), so each message produced is sent to both apps at the same time.</o>
+
+<p>The idea of ​​this scenario is to demonstrate a form of retry in which an error message is routed
+    to another topic (Chat.retry. [number]) to be read again. When the message is read by any retry thread, it is republished to the main thread. Each retry topic must have an exponential delay.
+    to avoid bottleneck.</p>
+<p>In this example we have 3 attempts, each with a longer delay than the other. If no attempt succeeds
+    process the message then this message should go to the final topic: DLQ (Dead letter queue).</p>
+<p>The advantage of this implementation is that retry topics do not need to know any business logic of the main topic, nor have any free access to databases or any external api. These retry APPs only redirect to the main topic.</p>
+
+<p>
+    Below are some reference links for this model:
+</p>
+
+<ul>
+    <li>
+        <a target="blank" href="https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722">Reference 1</a>
+    </li>
+    <li>
+        <a target="blank" href="https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a">Reference 2</a>
+    </li>
+</ul>
+
+<strong>Steps to simulate retry queues when both apps (App1 and App2) generate errors:</strong>
+
+<ol>
+    <li>Click the "Subscribe all" button to turn on all "listeners"</li>
+    <li>Keep the "Simulate error in next message" checkbox checked on all "listeners" so that all "listeners" generate errors.</li>
+    <li>Note that when the message arrives on the retry topic it goes back to the main topic to be processed again. In case of a new error, the message will be sent to the next retry topic.</li>
+    <li>Wait for the message to arrive at the "DLQ" topic after all attempts in both apps.</li>
+</ol>
+
+<strong>Steps to simulate retry queues in just one of the apps (App1):</strong>
+
+<ol>
+    <li>Click the "Subscribe all" button to turn on all "listeners"</li>
+    <li>Keep the "Simulate error in next message" checkbox checked on all "listeners" except "app2" so that only it does not generate an error.</li>
+    <li>Note that when the message arrives on the retry topic it goes back to the main topic to be processed again. In case of a new error, the message will be sent to the next retry topic.</li>
+    <li>Wait for the message to arrive at the "DLQ" topic after all attempts.</li>
+</ol>

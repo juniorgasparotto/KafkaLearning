@@ -8,9 +8,14 @@ import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-nex
   styleUrls: ['./modal-scenarios.component.css']
 })
 export class ModalScenariosComponent implements OnInit {
-  private tabs: { [id: string] : boolean } = {};
-  private ScenarioRetryMainTopicComponent = ScenarioRetryMainTopicComponent;
-  private ScenarioRetryNextTopicComponent = ScenarioRetryNextTopicComponent;
+  private static TABS: any[] = [
+    { component: ScenarioRetryMainTopicComponent, active: false },
+    { component: ScenarioRetryNextTopicComponent, active: false },
+  ];
+
+  private tabs: any[] = ModalScenariosComponent.TABS;
+
+  private currentTab: any;
 
   @Output()
   close: EventEmitter<any> = new EventEmitter();
@@ -18,30 +23,55 @@ export class ModalScenariosComponent implements OnInit {
   @Output()
   change: EventEmitter<any> = new EventEmitter();
 
-
-  constructor() {
-    
+  ngOnInit() {
+    for (var t in this.tabs)
+      if (this.tabs[t].component.name == localStorage.getItem('currentScenario'))
+        this.activeTab(this.tabs[t]);
   }
 
-  ngOnInit() {    
-    this.activeTab(localStorage.getItem('currentScenario'));
+  static getComponentByName(name: string): any {
+    for (var t in ModalScenariosComponent.TABS)
+      if (ModalScenariosComponent.TABS[t].component.name == name)
+        return ModalScenariosComponent.TABS[t].component;
+
+    return null;
   }
 
-  activeTab(name: string) {
-    for(var i in this.tabs)
-      this.tabs[i] = false;
+  activeTab(tab: any) {
+    for (var i in this.tabs) {
+      this.tabs[i].active = false;
+    }
 
-    this.tabs[name] = true;
+    this.currentTab = tab;
+    this.currentTab.active = true;
+  }
 
+  isActiveTab(tab: any) {
+    return tab.active;
+  }
+
+  getTabTitle(tab: any, lang: string) {
+    switch (lang) {
+      case 'pt-br':
+        return tab.component.TITLE_PT_BR;
+    }
+
+    return tab.component.TITLE;
+  }
+
+  getCurrentTabTitle(lang: string) {
+    return this.getTabTitle(this.currentTab, lang);
+  }
+
+  getCurrentTabUrlDescription(lang: string) {
+    return 'app/scenarios/' + this.currentTab.component.FOLDER + '/description' + (lang ? '-' + lang : '') + '.html';
+  }
+
+  changeScenario() {
+    this.change.emit(this.currentTab.component);
   }
 
   closeModal() {
     this.close.emit();
-  }
-
-  changeScenario() {
-    for(var i in this.tabs)
-      if (this.tabs[i])
-        this.change.emit(i);
   }
 }

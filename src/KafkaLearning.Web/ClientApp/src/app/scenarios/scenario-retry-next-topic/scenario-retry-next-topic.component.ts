@@ -7,8 +7,9 @@ import { ListenerComponent } from '../../listener/listener.component';
   styleUrls: ['./scenario-retry-next-topic.component.css']
 })
 export class ScenarioRetryNextTopicComponent implements OnInit {
-  public static NAME: string = "ScenarioRetryNextTopicComponent";
+  public static FOLDER: string = "scenario-retry-next-topic";
   public static TITLE: string = "Retry: Always go to next retry topic until DLQ";
+  public static TITLE_PT_BR: string = "Retry: Sempre vá para o próximo tópico de nova tentativa até chegar na DLQ";
 
   @ViewChildren(ListenerComponent)
   listeners: QueryList<ListenerComponent>;

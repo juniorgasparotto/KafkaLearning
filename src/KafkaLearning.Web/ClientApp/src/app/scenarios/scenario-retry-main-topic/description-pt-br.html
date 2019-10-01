@@ -1,0 +1,46 @@
+<p>Nesse cenário, temos duas aplicações distintas (App1 e App2) que simulam duas APIs de diferentes propósitos que
+    "escutam" o mesmo tópico (Chat).</p>
+
+<p>Cada uma das apps tem seu próprio grupo de consumo (g1 e g2), isso faz com que cada mensagem produzida seja enviada para as duas apps ao mesmo tempo.</o>
+
+<p>A ideia deste cenário é demostrar uma forma de retry no qual uma mensagem que gerou um erro seja encaminhada
+    para um outro tópico (Chat.retry.[number]) para ser lida novamente. Quando a mensagem é lida por qualquer tópico de retry, ela é publicada novamente no tópico principal. Cada tópico de retry deve ter um delay exponencial
+    para evitar gargalo.</p>
+<p>Nesse exemplo, temos 3 tentativas, cada uma com o delay maior que o outro. Caso nenhuma tentativa consiga
+    processar a mensagem então essa mensagem deve ir para o tópico final: DLQ (Dead letter queue).</p>
+<p>A vantagem dessa implementação é que os tópicos de retry não precisam conhecer nenhuma lógica de negócio do tópico principal e nem ter nenhum acesso liberado a banco de dados ou qualquer api externa. Essas APPs de retry apenas fazem um "redirect" para o tópico principal.</p>
+
+<p>
+    Abaixo, temos alguns links de referência desse modelo:
+</p>
+
+<ul>
+    <li>
+        <a target="blank"
+            href="https://medium.com/naukri-engineering/retry-mechanism-and-delay-queues-in-apache-kafka-528a6524f722">Referência
+            1</a>
+    </li>
+    <li>
+        <a target="blank"
+            href="https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a">Referência
+            2</a>
+    </li>
+</ul>
+
+<strong>Passos para simular as filas de retentativas quando as duas apps (App1 e App2) geram erro:</strong>
+
+<ol>
+    <li>Clicar no botão "Subscribe all" para ligar todos os "ouvintes"</li>
+    <li>Manter marcado o checkbox "Simulate error in next message" em todos os "ouvintes" para que todos os "ouvintes" gerem erro.</li>
+    <li>Note que quando a mensagem chega no tópico de retry ela volta para o tópico principal para ser processada novamente. Em caso de novo erro, a mensagem será enviada para o próximo tópico de retry.</li>
+    <li>Aguardar até que a mensagem chegue no tópico "DLQ" após todas as tentativas nas duas apps.</li>
+</ol>
+
+<strong>Passos para simular as filas de retentativas em apenas uma das aplicações (App1):</strong>
+
+<ol>
+    <li>Clicar no botão "Subscribe all" para ligar todos os "ouvintes"</li>
+    <li>Manter marcado o checkbox "Simulate error in next message" em todos os "ouvintes", exceto no "app2" para que apenas ele não gere erro.</li>
+    <li>Note que quando a mensagem chega no tópico de retry ela volta para o tópico principal para ser processada novamente. Em caso de novo erro, a mensagem será enviada para o próximo tópico de retry.</li>
+    <li>Aguardar até que a mensagem chegue no tópico "DLQ" após todas as tentativas.</li>
+</ol>

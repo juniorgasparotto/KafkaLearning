@@ -8,7 +8,9 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets"
+        "assets",
+        "app/scenarios/*/description-pt-br.html",
+        "app/scenarios/*/description.html"
       ],
       "index": "index.html",
       "main": "main.ts",
