@@ -1,0 +1,25 @@
+<p>Point to Point means message(s) is sent from one application(producer or sender) to another application(consumer/receiver) via a queue. There can be more than one consumer listening on a queue but only one of them will be get the message. Hence it is Point to Point or One to One.</p>
+
+<p>In this scenario, we have two distinct applications (App1 and App2) that simulate two different purpose APIs that "listen" to the same topic (Chat).</p>
+
+<p>Both applications use the same consumer group ID and only one will receive the message.</o>
+
+<p>
+    Below are some reference links for this model:
+</p>
+
+<ul>
+    <li>
+        <a target="blank" href="http://gsraj.tripod.com/jms/sender.html">Reference 1</a>
+    </li>
+    <li>
+        <a target="blank" href="https://docs.oracle.com/cd/E19340-01/820-6424/aerbj/index.html">Reference 2</a>
+    </li>
+</ul>
+
+<strong>Steps to simulate:</strong>
+
+<ol>
+    <li>Click the "Subscribe all" button to turn on all "listeners"</li>
+    <li>One application will receive the message and the other will not.</li>
+</ol>

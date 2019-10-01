@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
+import { ScenarioPointToPointComponent } from '../Scenarios/scenario-point-to-point/scenario-point-to-point.component';
+import { ScenarioPublishSubscribeComponent } from '../Scenarios/scenario-publish-subscribe/scenario-publish-subscribe.component';
 
 @Component({
   selector: 'app-modal-scenarios',
@@ -11,6 +13,8 @@ export class ModalScenariosComponent implements OnInit {
   private static TABS: any[] = [
     { component: ScenarioRetryMainTopicComponent, active: false },
     { component: ScenarioRetryNextTopicComponent, active: false },
+    { component: ScenarioPointToPointComponent, active: false },
+    { component: ScenarioPublishSubscribeComponent, active: false },
   ];
 
   private tabs: any[] = ModalScenariosComponent.TABS;

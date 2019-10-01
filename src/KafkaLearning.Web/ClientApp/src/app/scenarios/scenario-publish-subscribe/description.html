@@ -1,0 +1,22 @@
+<p>Publish / Subscribe is another model in which a message (or publication, as it is commonly called) is sent to multiple consumers (or subscribers) through a topic. The topic is the link between the publisher and subscriber. Publications will be received by all subscribers. Any new subscribers to the same topic will not receive the post.</p>
+
+<p>In this scenario, we have two distinct applications (App1 and App2) that simulate two different purpose APIs that "listen" to the same topic (Chat).</p>
+
+<p>Each of the apps has its own consumer group (g1 and g2), so each message produced is sent to both apps at the same time.</o>
+
+<p>
+    Below are some reference links for this model:
+</p>
+
+<ul>
+    <li>
+        <a target="blank" href="https://en.wikipedia.org/wiki/Publish–subscribe_pattern">Reference 1</a>
+    </li>    
+</ul>
+
+<strong>Steps to simulate:</strong>
+
+<ol>
+    <li>Click the "Subscribe all" button to turn on all "listeners"</li>    
+    <li>Wait for the message to arrive in both applications.</li>
+</ol>

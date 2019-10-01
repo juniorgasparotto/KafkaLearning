@@ -1,9 +1,7 @@
 import { Component, Inject, OnInit, ComponentFactoryResolver, ViewContainerRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
-import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
 import { ModalScenariosComponent } from '../modal-scenarios/modal-scenarios.component';
-
+import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +18,6 @@ export class HomeComponent implements OnInit {
   public viewScenarios: boolean;
   private title: string;
 
-  private scenarios: any[] = new Array<any>();
   private currentScenario: any;
 
   constructor(
@@ -28,8 +25,6 @@ export class HomeComponent implements OnInit {
     @Inject('BASE_URL') private baseUrl: string,
     @Inject(ComponentFactoryResolver) private factoryResolver
   ) {
-    this.scenarios.push(ScenarioRetryMainTopicComponent);
-    this.scenarios.push(ScenarioRetryMainTopicComponent);
   }
 
   ngOnInit(): void {

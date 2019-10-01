@@ -1,0 +1,26 @@
+<p>Ponto a ponto significa que as mensagens são enviadas de um aplicativo (produtor ou remetente) para outro aplicativo (consumidor / destinatário) por meio de um tópico. Pode haver mais de um consumidor ouvindo o mesmo tópico, mas apenas um deles receberá a mensagem. Portanto, é ponto a ponto ou um a um.</p>
+
+<p>Nesse cenário, temos duas aplicações distintas (App1 e App2) que simulam duas APIs de diferentes propósitos que
+    "escutam" o mesmo tópico (Chat).</p>
+
+<p>Ambas as aplicações utilizam o mesmo ID de grupo de consumo e apenas uma receberá a mensagem</o>
+
+<p>
+    Abaixo, temos alguns links de referência desse modelo:
+</p>
+
+<ul>
+    <li>
+        <a target="blank" href="http://gsraj.tripod.com/jms/sender.html">Referência 1</a>
+    </li>
+    <li>
+        <a target="blank" href="https://docs.oracle.com/cd/E19340-01/820-6424/aerbj/index.html">Referência 2</a>
+    </li>
+</ul>
+
+<strong>Passos para simular:</strong>
+
+<ol>
+    <li>Clicar no botão "Subscribe all" para ligar todos os "ouvintes"</li>    
+    <li>Uma das aplicações receberá a mensagem e a outra não.</li>
+</ol>

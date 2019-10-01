@@ -14,6 +14,9 @@ export class HtmlIncludeComponent implements OnInit {
       .subscribe(
         data => {
           this.html = data;
+        },
+        error => {
+          this.html = JSON.stringify(error);
         }
       );
   }

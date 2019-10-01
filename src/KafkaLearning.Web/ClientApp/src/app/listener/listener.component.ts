@@ -58,7 +58,7 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
 
   public setSettings() {
     this.http.get<AppInfo[]>(this.baseUrl + `api/Server/GetSubscribers?appName=${this.appName}`).subscribe(
-      result => {
+      result => {        
         if (result.length > 0) {
           var appInfo = result[0];
           this.simulateError = appInfo.simulateError;
