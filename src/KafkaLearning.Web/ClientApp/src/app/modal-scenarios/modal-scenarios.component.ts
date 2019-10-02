@@ -11,10 +11,10 @@ import { ScenarioPublishSubscribeComponent } from '../Scenarios/scenario-publish
 })
 export class ModalScenariosComponent implements OnInit {
   private static TABS: any[] = [
-    { component: ScenarioRetryMainTopicComponent, active: false },
-    { component: ScenarioRetryNextTopicComponent, active: false },
     { component: ScenarioPointToPointComponent, active: false },
     { component: ScenarioPublishSubscribeComponent, active: false },
+    { component: ScenarioRetryMainTopicComponent, active: false },
+    { component: ScenarioRetryNextTopicComponent, active: false },
   ];
 
   private tabs: any[] = ModalScenariosComponent.TABS;
