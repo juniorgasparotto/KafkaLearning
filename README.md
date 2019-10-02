@@ -60,16 +60,16 @@ dotnet run
 
 
 
-![change scenario](.\assets\screen.PNG)
+![change scenario](./assets/screen.PNG)
 
 
 ## Trocar de cenário
 
 Para trocar de cenário, clique no botão `Change Scenario` e selecione o cenário desejado:
 
-![change scenario](.\assets\btn-change-scenario.PNG)
+![change scenario](./assets/btn-change-scenario.PNG)
 
-![change scenario](.\assets\modal-change-scenario.PNG)
+![change scenario](./assets/modal-change-scenario.PNG)
 
 
 
