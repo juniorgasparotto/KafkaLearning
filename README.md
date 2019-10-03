@@ -1,93 +1,96 @@
+<a href="https://github.com/juniorgasparotto/KafkaLearning" rel="some text">[![change scenario](./assets/en-us.png)</a>
+<a href="https://github.com/juniorgasparotto/KafkaLearning/blob/master/README-PT-BR.md" rel="some text">![change scenario](./assets/pt-br.png)</a>
+
 # KafkaLearning
 
-Esse projeto tem o objetivo de demonstrar como funciona alguns conceitos do Kafka. Por hora, temos os seguintes conceitos pre-configurados:
+This project aims to demonstrate how some Kafka concepts work. For now, we have the following preconfigured concepts:
 
-* `Point to Point`: Quando um produtor envia uma mensagem e apenas um consumidor fica responsável por ler a mensagem, mesmo que exista mais de um consumidor ouvindo o mesmo tópico.
-* `Publish/Subscribe`: Quando um produtor envia uma mensagem e mais de um consumidor pode ler a mesma mensagem.
+* `Point to Point`: When a producer sends a message and only one consumer is responsible for reading the message, even if there is more than one consumer listening to the same topic.
+* `Publish/Subscribe`: When a producer sends a message and more than one consumer can read the same message.
 * `Retry`:
-    * Modelo 1: A mensagem com erro é enviada para um tópico de retentativa com um delay de reprocessamento. Após o delay a mensagem volta para o tópico principal para uma nova tentativa. Após esgotado as tentativas a mensagem vai para o tópico final chamado DLQ.
-    * Modelo 2: A mensagem com erro é enviada para um tópico de retentativa com um delay de reprocessamento. Após o delay a mensagem é reprocessada novamente no próprio tópico de retentativa. Após esgotado as tentativas a mensagem vai para o tópico final chamado DLQ.
+    * Model 1: The error message is sent to a retry topic with a reprocessing delay. After the delay the message returns to the main topic for a retry. After the attempts are exhausted the message goes to the final topic called DLQ.
+    * Model 2: The error message is sent to a retry topic with a reprocessing delay. After the delay the message is reprocessed again in the retry topic itself. After the attempts are exhausted the message goes to the final topic called DLQ.
 
-## Requisitos
+## Requirements
 
 * .NET Core 2.1+ (.NET CLI)
 * Kafka 2.11-2.2.0+
 * NodeJs (npm, angular 7)
-* Chrome (Com suporte a WebSocket/SignalR)
+* Chrome (With WebSocket / SignalR Support)
 
-## Executando
+## Running
 
-* Fazer o download do Kafka: https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.11-2.3.0.tgz
-* Descompactar o Kafka na pasta `C:\` (ou qualquer outra pasta)
-* Executar o Zookeeper usando a configuração padrão:
+* Download Kafka: https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.11-2.3.0.tgz
+* Unzip Kafka in the `C:\` folder (or any other folder)
+* Run Zookeeper using the default setting:
 
 ```
 C:/kafka_2.11-2.3.0/bin/windows/zookeeper-server-start.bat C:/kafka_2.11-2.3.0/config/zookeeper.properties
 ```
 
-* Executar o broker do Kafka usando a configuração padrão:
+* Run Kafka broker using the default setting:
 
 ```
 C:/kafka_2.11-2.3.0/bin/windows/kafka-server-start.bat C:/kafka_2.11-2.3.0/config/server.properties
 ```
 
-* Fazer o clone desse projeto em seu local de preferência
+* Clone this project to your preferred location
 
 ```
 git clone https://github.com/juniorgasparotto/KafkaLearning.git
 ```
 
-* Abrir o terminal na raiz do código clonado
-* Baixar todos os módulos do angular
+* Open terminal at root of cloned code
+* Download all angular modules
 
 ```
 cd src/KafkaLearning.Web/ClientApp
 npm install
 ```
 
-* Baixar as dependências do .NET e Build
+* Download .NET and Build Dependencies
 
 ```
 cd src/KafkaLearning.Web
 dotnet build
 ```
 
-* Executar o projeto (o angular subirá junto)
+* Run the project (the angle will go up together)
 
 ```
 cd src/KafkaLearning.Web
 dotnet run
 ```
 
-* Abrir no Chrome o url: https://localhost:5001. Você deve visualizar a seguinte tela:
-    * Caso essa porta esteja sendo usada por outro projeto, altere-a.
+* Open in Chrome the url: https://localhost:5001. You should see the following screen:
+    * If this port is being used by another project, change it.
 
 ![change scenario](./assets/screen.PNG)
 
-* Clique no botão `Subscribe All`. O cenário padrão será o `Publish/Subscribe`
-* Envia uma mensagem clicando no botão `Send` e note que a mensagem chegará nos dois ouvintes `app1` e `app2`.
+* Click on the `Subscribe All` button. The default scenario will be `Publish / Subscribe`
+* Send a message by clicking the `Send` button and note that the message will arrive at both the` app1` and `app2` listeners.
 
-## Trocar de cenário
+## Change scenery
 
-Para trocar de cenário, clique no botão `Change Scenario` e selecione o cenário desejado:
+To switch scenarios, click on the `Change Scenario` button and select the desired scenario:
 
 ![change scenario](./assets/btn-change-scenario.PNG)
 
 ![change scenario](./assets/modal-change-scenario.PNG)
 
-## Adicionando um novo cenário:
+## Adding a new scenario:
 
-Outros cenários podem ser inseridos futuramente. O código está bem simples para isso, basta seguir os passos:
+Other scenarios may be inserted in the future. The code is very simple for that, just follow the steps:
 
-* Crie um componente angular na pasta `src/KafkaLearning.Web/ClientApp/src/app/scenarios`: 
+* Create an angular component in the folder `src/KafkaLearning.Web/ClientApp/src/app/scenarios`: 
 
 ```
 ng g c ScenarioMyCustomTest
 ```
 
-* Copie o código do componente existente `scenario-point-to-point/scenario/point-to-point.component.ts` e cole no arquivo `scenario-my-custom-test.component.ts` do novo componente, mantendo apenas o nome da classe do novo cenário.
+* Copy existing component code `scenario-point-to-point/scenario/point-to-point.component.ts` and paste in the file `scenario-my-custom-test.component.ts` of the new component, keeping only the class name of the new scenario.
 
-* Altere o nome da pasta e o título do novo componente 
+* Change folder name and new component title
 
 ```typescript
   public static FOLDER: string = "scenario-my-custom-test";
@@ -95,8 +98,8 @@ ng g c ScenarioMyCustomTest
   public static TITLE_PT_BR: string = "Meu cenário customizado";
 ```
 
-* Abra o arquivo de template e adicione os ouvintes com a sua configuração desejada. 
-    * Mantenha a pai `<div class="subscribers">` para não quebrar o layout. 
+* Open the template file and add the listeners with your desired setting.
+    * Keep the parent `<div class="subscribers">` so as not to break the layout.
 
 ```html
 <div class="subscribers">
@@ -105,11 +108,11 @@ ng g c ScenarioMyCustomTest
 </div>
 ```
 
-* Crie um arquivo chamado `description.html` na raiz do novo componente. Caso queira manter dois idiomas, crie o arquivo `description-pt-br.html`. Esse arquivo é HTML puro e deve conter a descrição do cenário.
+* Create a file named `description.html` in the root of the new component. If you want to keep two languages, create the `description-pt-br.html` file. This file is pure HTML and must contain the description of the scenario.
 
-* Localize o arquivo `src/KafkaLearning.Web/ClientApp/src/app/modal-scenarios/modal-scenarios.component.ts` para adicionar o cenário na modal de escolha. 
+* Locate the file `src/KafkaLearning.Web/ClientApp/src/app/modal-scenarios/modal-scenarios.component.ts` to add the scenario in the modal of choice.
 
-* Adicione o novo cenário no final do array `TABS`
+* Add new scenario at end of `TABS` array
 
 ```typescript
 private static TABS: any[] = [
@@ -124,13 +127,13 @@ private static TABS: any[] = [
   ];
 ```
 
-* Faça o build do angular com `ng build` e execute novamente o projeto.
+* Build the angular with `ng build` and rerun the project.
 
-* Pronto, seu novo componente deve aparecer na modal e já pode ser utilizado.
+* There, your new component should appear in modal and can now be used.
 
-## Configurações do ouvinte
+## Listener Settings
 
-As configurações do componente/ouvinte `app-listener` tem uma relação direta com as configurações do `Kafka` e outras configurações de `retry` que criamos, são elas:
+The `app-listener` component/listener settings have a direct relationship to the` Kafka` settings and other `retry` settings we have created, they are:
 
 ```html
 <app-listener 
@@ -144,25 +147,25 @@ As configurações do componente/ouvinte `app-listener` tem uma relação direta
     ></app-listener>
 ```
 
-* `appName`: Nome da aplicação de simulação
-* `topic`: Nome do tópico do `Kafka`
-* `groupId`: Nome do grupo de consumo do `Kafka`
-* `simulateError`: Indica se o ouvinte deve emitir um erro ou não quando ele ler uma mensagem. 
-    * Dica: Cenários de erros devem sempre ser considerados em seus `Handlers`, assim como a estratégia de retry, caso necessite. 
-* `retryStrategy`: Define qual será a estratégia de retry desse ouvinte/consumidor
-    * `retry`: Quando definido com este valor e ocorrer um erro no consumidor, o código vai criar ou atualizar o cabeçalho `retry.count` incrementando `+1` no valor e encaminhar a mensagem para o tópico que foi definido na configuração `retryTopic`.
-    * `redirect`: Quando definido com este valor o código não fará nada com a mensagem, apenas fará o redirecionamento da mensagem para o tópico que foi definido na configuração `retryTopic`.
-* `retryTopic`: Tópico de destino em caso de erro ou quando a configuração `retryStrategy` for igual a `redirect`.
-* `delay`: Quando definido, o consumidor criará um atraso na leitura da mensagem, isso é útil para criar retentativas exponenciais. 
+* `appName`: Simulation App Name
+* `topic`: Kafka Topic Name
+* `groupId`: Kafka Consumer Group Name
+* `simulateError`: Indicates whether or not the listener should issue an error when reading a message.
+    * Tip: Error scenarios should always be considered in your `Handlers`, as well as the retry strategy if you need to.
+* `retryStrategy`: Defines what this listener / consumer retry strategy will be
+    * `retry`: When set to this value and a consumer error occurs, the code will create or update the `retry.count` header by incrementing` + 1` in the value and forwarding the message to the topic that was set in the `retryTopic` setting.
+    * `redirect`: When set to this value the code will do nothing with the message, it will only redirect the message to the topic that was set in the `retryTopic` setting.
+* `retryTopic`: Destination topic on error or when setting `retryStrategy` equals` redirect`.
+* `delay`: When set, the consumer will create a delay in reading the message, which is useful for creating exponential retries.
 
-OBS: Talvez o uso do valor `redirect` na configuração `retryStrategy` não faça sentido, verificar se não seria melhor criar algo como: `handler=none|redirect` e `handle-args=REDIRECT_TOPIC_NAME`.
+NOTE: Maybe using the `redirect` value in the` retryStrategy` setting does not make sense, check if it would be better to create something like: `handler=none|redirect` and` handle-args=REDIRECT_TOPIC_NAME`.
 
-## Melhorias
+## Improvements
 
-* Criar uma classe abstrata para todos os cenários para não precisar copiar o mesmo código toda vez que cria um novo cenário
-* Enviar os dados do produtor para dentro do cenário
-* Renomear as classes de `ConsumerClient` para `Listener` e simplificar mecanismo.
+* Create an abstract class for all scenarios so you don't have to copy the same code every time you create a new scenario
+* Send producer data into scenario
+* Rename the classes from `ConsumerClient` to` Listener` and simplify mechanism.
 
-## Ferramentas uteis:
+## Useful tools:
 
-* http://www.kafkatool.com/download2/kafkatool.exe: Com essa ferramenta é possível visualizar todos os tópicos de um broker, além dos dados e outras informações importantes.
+* http://www.kafkatool.com/download2/kafkatool.exe: With this tool you can view all topics of a broker, as well as data and other important information.
