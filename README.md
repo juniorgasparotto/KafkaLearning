@@ -1,5 +1,5 @@
-<a href="https://github.com/juniorgasparotto/KafkaLearning" rel="some text">[![change scenario](./assets/en-us.png)</a>
-<a href="https://github.com/juniorgasparotto/KafkaLearning/blob/master/README-PT-BR.md" rel="some text">![change scenario](./assets/pt-br.png)</a>
+<a href="https://github.com/juniorgasparotto/KafkaLearning" rel="some text">![change scenario](https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/assets/en-us.png)</a>
+<a href="https://github.com/juniorgasparotto/KafkaLearning/blob/master/README-PT-BR.md" rel="some text">![change scenario](https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/assets/pt-br.png)</a>
 
 # KafkaLearning
 
