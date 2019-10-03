@@ -1,3 +1,6 @@
+<a href="https://github.com/juniorgasparotto/KafkaLearning" rel="some text">![change scenario](https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/assets/en-us.png)</a>
+<a href="https://github.com/juniorgasparotto/KafkaLearning/blob/master/README-PT-BR.md" rel="some text">![change scenario](https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/assets/pt-br.png)</a>
+
 # KafkaLearning
 
 Esse projeto tem o objetivo de demonstrar como funciona alguns conceitos do Kafka. Por hora, temos os seguintes conceitos pre-configurados:
