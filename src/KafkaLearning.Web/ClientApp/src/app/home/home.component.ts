@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, ComponentFactoryResolver, ViewContainerRef, 
 import { HttpClient } from '@angular/common/http';
 import { ModalScenariosComponent } from '../modal-scenarios/modal-scenarios.component';
 import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
-import { ScenarioPointToPointComponent } from '../Scenarios/scenario-point-to-point/scenario-point-to-point.component';
+import { ScenarioPointToPointComponent } from '../scenarios/scenario-point-to-point/scenario-point-to-point.component';
 
 @Component({
   selector: 'app-home',

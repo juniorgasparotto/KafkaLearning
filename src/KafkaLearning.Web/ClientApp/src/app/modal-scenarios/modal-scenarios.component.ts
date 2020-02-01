@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ScenarioRetryNextTopicComponent } from '../scenarios/scenario-retry-next-topic/scenario-retry-next-topic.component';
-import { ScenarioPointToPointComponent } from '../Scenarios/scenario-point-to-point/scenario-point-to-point.component';
-import { ScenarioPublishSubscribeComponent } from '../Scenarios/scenario-publish-subscribe/scenario-publish-subscribe.component';
+import { ScenarioPointToPointComponent } from '../scenarios/scenario-point-to-point/scenario-point-to-point.component';
+import { ScenarioPublishSubscribeComponent } from '../scenarios/scenario-publish-subscribe/scenario-publish-subscribe.component';
 
 @Component({
   selector: 'app-modal-scenarios',

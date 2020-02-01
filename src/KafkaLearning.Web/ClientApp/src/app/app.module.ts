@@ -15,8 +15,8 @@ import { ScenarioRetryNextTopicComponent } from './scenarios/scenario-retry-next
 import { ScenarioRetryMainTopicComponent } from './scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ModalScenariosComponent } from './modal-scenarios/modal-scenarios.component';
 import { HtmlIncludeComponent } from './html-include/html-include.component';
-import { ScenarioPointToPointComponent } from './Scenarios/scenario-point-to-point/scenario-point-to-point.component';
-import { ScenarioPublishSubscribeComponent } from './Scenarios/scenario-publish-subscribe/scenario-publish-subscribe.component';
+import { ScenarioPointToPointComponent } from './scenarios/scenario-point-to-point/scenario-point-to-point.component';
+import { ScenarioPublishSubscribeComponent } from './scenarios/scenario-publish-subscribe/scenario-publish-subscribe.component';
 
 @NgModule({
   declarations: [
