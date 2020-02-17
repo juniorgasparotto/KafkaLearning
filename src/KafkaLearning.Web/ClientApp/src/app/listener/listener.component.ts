@@ -16,10 +16,10 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
   public consumerSettigns: ConsumerSettigns;
   public messages: EventMessage[];
   private hubConnection: signalR.HubConnection;
-  private hasSubcribe: boolean;
-  private loading: boolean;
-  private lastError: any;
-  private appInfo: AppInfo;
+  public hasSubcribe: boolean;
+  public loading: boolean;
+  public lastError: any;
+  public appInfo: AppInfo;
 
   @ViewChild('scrollBottom')
   private myScrollContainer: ElementRef;

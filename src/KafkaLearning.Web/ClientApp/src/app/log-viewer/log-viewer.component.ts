@@ -8,9 +8,9 @@ import * as signalR from "@aspnet/signalr";
   styleUrls: ['./log-viewer.component.css']
 })
 export class LogViewerComponent implements OnInit {
-  private logs: Array<LogEvent>;
+  public logs: Array<LogEvent>;
   private hubConnection: signalR.HubConnection;
-  private loading: boolean;
+  public loading: boolean;
 
   @Output()
   close: EventEmitter<any> = new EventEmitter();
@@ -35,7 +35,7 @@ export class LogViewerComponent implements OnInit {
     this.update();
   }
 
-  private update() {
+  public update() {
     this.loading = true;
     this.http.get<Array<LogEvent>>(this.baseUrl + `api/Server/GetAllLogs`).subscribe(result => {
       this.logs = result;

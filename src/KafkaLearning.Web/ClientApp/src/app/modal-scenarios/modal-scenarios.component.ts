@@ -17,9 +17,9 @@ export class ModalScenariosComponent implements OnInit {
     { component: ScenarioRetryNextTopicComponent, active: false },
   ];
 
-  private tabs: any[] = ModalScenariosComponent.TABS;
-
+  public tabs: any[] = ModalScenariosComponent.TABS;
   private currentTab: any;
+  public lang: string;
 
   @Output()
   close: EventEmitter<any> = new EventEmitter();

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   public publisherSettigns: string;
   public viewLogs: boolean;
   public viewScenarios: boolean;
-  private title: string;
+  public title: string;
 
   private currentScenario: any;
 

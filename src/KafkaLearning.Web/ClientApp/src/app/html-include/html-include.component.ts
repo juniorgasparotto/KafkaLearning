@@ -6,7 +6,7 @@ import { HttpClient } from "@angular/common/http";
   template: '<div [innerHtml]="html">waiting...</div>'
 })
 export class HtmlIncludeComponent implements OnInit {
-  private html: string = "";
+  public html: string = "";
 
   @Input()
   public set htmlUrl(value: string) {
