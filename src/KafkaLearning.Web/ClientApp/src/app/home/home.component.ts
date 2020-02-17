@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.publisherSettigns = JSON.stringify({
-      "BootstrapServers": "localhost:9092",
+      "BootstrapServers": "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
       "Topic": "Chat"
     }, null, 2);
 

@@ -10,14 +10,17 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
     public class ProducerConnectionBuilder<TKey, TValue>
     {
         private readonly ProducerConfig producerConfig;
-        private readonly ProducerBuilder<TKey, TValue> consumerBuilder;
+        private readonly ProducerBuilder<TKey, TValue> producerBuilder;
 
         internal bool AsyncProducer { get; private set; }
 
         public ProducerConnectionBuilder()
         {
             this.producerConfig = new ProducerConfig();
-            this.consumerBuilder = new ProducerBuilder<TKey, TValue>(producerConfig);
+            this.producerBuilder = new ProducerBuilder<TKey, TValue>(producerConfig);
+
+            this.producerConfig.SecurityProtocol = SecurityProtocol.Ssl;
+            this.producerConfig.SslCaLocation = @"C:\kafka_2.11-2.3.0\bin\windows\ca.crt";
         }
 
         #region Fluent setters
@@ -40,8 +43,8 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
             var schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryConfig);
             var serializerConfig = new AvroSerializerConfig();
 
-            consumerBuilder.SetKeySerializer(new AvroSerializer<TKey>(schemaRegistryClient, serializerConfig));
-            consumerBuilder.SetValueSerializer(new AvroSerializer<TValue>(schemaRegistryClient, serializerConfig));
+            producerBuilder.SetKeySerializer(new AvroSerializer<TKey>(schemaRegistryClient, serializerConfig));
+            producerBuilder.SetValueSerializer(new AvroSerializer<TValue>(schemaRegistryClient, serializerConfig));
 
             return this;
         }
@@ -50,8 +53,8 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
             if (typeof(TKey) == typeof(string) || typeof(TValue) == typeof(string))
                 return this;
 
-            consumerBuilder.SetKeySerializer(new JsonSerializer<TKey>());
-            consumerBuilder.SetValueSerializer(new JsonSerializer<TValue>());
+            producerBuilder.SetKeySerializer(new JsonSerializer<TKey>());
+            producerBuilder.SetValueSerializer(new JsonSerializer<TValue>());
 
             return this;
         }
@@ -66,7 +69,7 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
 
         public IProducer<TKey, TValue> Build()
         {
-            return this.consumerBuilder.Build();
+            return this.producerBuilder.Build();
         }
     }
 }

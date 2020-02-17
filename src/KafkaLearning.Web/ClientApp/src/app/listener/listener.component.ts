@@ -81,7 +81,7 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
 
   private setSettingsDefault() {
     this.consumerSettigns = {
-      bootstrapServers: "localhost:9092",
+      bootstrapServers: "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
       groupId: this.groupId,
       enableAutoCommit: true,
       autoOffSetReset: 0,

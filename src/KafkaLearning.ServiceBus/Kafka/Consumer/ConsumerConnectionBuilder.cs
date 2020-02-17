@@ -24,7 +24,10 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
             {
                 MaxPollIntervalMs = 60000,
             };
-
+            
+            this.configs.Debug = "all";
+            this.configs.SecurityProtocol = SecurityProtocol.Ssl;
+            this.configs.SslCaLocation = @"C:\kafka_2.11-2.3.0\bin\windows\ca.crt";
             this.consumerBuilder = new ConsumerBuilder<TKey, TValue>(configs);
         }
 
