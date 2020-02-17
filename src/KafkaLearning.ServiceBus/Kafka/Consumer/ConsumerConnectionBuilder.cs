@@ -31,8 +31,9 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
                 //this.configs.Debug = "all";
                 this.configs.SecurityProtocol = SecurityProtocol.Ssl;
                 this.configs.SslCaLocation = caPath;
-                this.consumerBuilder = new ConsumerBuilder<TKey, TValue>(configs);
             }
+            
+            this.consumerBuilder = new ConsumerBuilder<TKey, TValue>(configs);
         }
 
         #region Fluent setters
