@@ -82,7 +82,7 @@ namespace KafkaLearning.Web.Controllers
             request.Message.SendDate = DateTime.Now;
 
             // Create producer
-            var builder = new ProducerConnectionBuilder<Guid, EventMessage>(this._appConfiguration.Kafka.CertificatePath);
+            var builder = new ProducerConnectionBuilder<Guid, EventMessage>(request.Settings.IgnoreSsl ? null :this._appConfiguration.Kafka.CertificatePath);
             var producer = builder
                             .WithBootstrapServers(request.Settings.BootstrapServers)
                             .WithAsyncProducer()
@@ -110,7 +110,7 @@ namespace KafkaLearning.Web.Controllers
             {
                 TopicConsumer<Guid, EventMessage> topicConsumer;
                 var cancelSource = new CancellationTokenSource();
-                var builder = new ConsumerConnectionBuilder<Guid, EventMessage>(this._appConfiguration.Kafka.CertificatePath);
+                var builder = new ConsumerConnectionBuilder<Guid, EventMessage>(settings.IgnoreSsl ? null : this._appConfiguration.Kafka.CertificatePath);
                 builder.WithBrokers(settings.BootstrapServers);
                 builder.WithTopic(settings.Topic);
                 builder.WithGroupId(settings.GroupId);

@@ -14,5 +14,6 @@ namespace KafkaLearning.ServiceBus.Configurations
         public bool EnablePartitionEof { get; set; }
         public int MaxPollIntervalMs { get; set; }
         public int Delay { get; set; }
+        public bool IgnoreSsl { get; set; }
     }
 }
