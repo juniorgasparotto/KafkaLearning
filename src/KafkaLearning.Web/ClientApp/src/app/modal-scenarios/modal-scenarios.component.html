@@ -4,7 +4,7 @@
       *ngFor="let t of tabs" 
       class="title-scenario" 
       (click)="activeTab(t)" 
-      [class.active]="isActiveTab(t)">{{getTabTitle(t, lang)}}</div>
+      [class.active]="isActiveTab(t)">{{getTabTitle(t, lang)}} - {{t | json}}</div>
   </div>
 
   <div class="right">

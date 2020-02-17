@@ -29,7 +29,7 @@ export class ModalScenariosComponent implements OnInit {
 
   ngOnInit() {
     for (var t in this.tabs)
-      if (this.tabs[t].component.name == localStorage.getItem('currentScenario'))
+      if (this.tabs[t].name == localStorage.getItem('currentScenario'))
         this.activeTab(this.tabs[t]);
   }
 
@@ -55,6 +55,7 @@ export class ModalScenariosComponent implements OnInit {
   }
 
   getTabTitle(tab: any, lang: string) {
+    console.log(tab)
     switch (lang) {
       case 'pt-br':
         return tab.component.TITLE_PT_BR;
