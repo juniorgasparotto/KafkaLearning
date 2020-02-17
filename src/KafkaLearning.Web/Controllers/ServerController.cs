@@ -39,8 +39,7 @@ namespace KafkaLearning.Web.Controllers
             ILogger<ServerController> logger,
             IOptions<AppConfigurationOptions> appConfiguration,
             IHubContext<EventMessageHub> kafkaHubContext,
-            IHubContext<LogHub> logHubContext,
-            IOptions<KafkaConfig> op
+            IHubContext<LogHub> logHubContext
         )
         {
             this._kafkaHubContext = kafkaHubContext;

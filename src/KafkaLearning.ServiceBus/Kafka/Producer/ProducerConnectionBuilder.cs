@@ -20,7 +20,7 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
             this.producerBuilder = new ProducerBuilder<TKey, TValue>(producerConfig);
             this.producerConfig.SecurityProtocol = SecurityProtocol.Plaintext;
 
-            if (caPath != null)
+            if (!string.IsNullOrWhiteSpace(caPath))
             {
                 this.producerConfig.SecurityProtocol = SecurityProtocol.Ssl;
                 this.producerConfig.SslCaLocation = caPath;

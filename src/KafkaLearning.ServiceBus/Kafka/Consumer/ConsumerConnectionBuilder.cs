@@ -26,7 +26,7 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
                 MaxPollIntervalMs = 60000,
             };
 
-            if (caPath != null)
+            if (!string.IsNullOrWhiteSpace(caPath))
             {
                 //this.configs.Debug = "all";
                 this.configs.SecurityProtocol = SecurityProtocol.Ssl;
