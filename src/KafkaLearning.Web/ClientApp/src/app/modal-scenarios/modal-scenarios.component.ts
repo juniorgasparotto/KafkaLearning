@@ -11,10 +11,10 @@ import { ScenarioPublishSubscribeComponent } from '../scenarios/scenario-publish
 })
 export class ModalScenariosComponent implements OnInit {
   private static TABS: any[] = [
-    { component: ScenarioPointToPointComponent, active: false },
-    { component: ScenarioPublishSubscribeComponent, active: false },
-    { component: ScenarioRetryMainTopicComponent, active: false },
-    { component: ScenarioRetryNextTopicComponent, active: false },
+    { name: 'ScenarioPointToPointComponent', component: ScenarioPointToPointComponent, active: false },
+    { name: 'ScenarioPublishSubscribeComponent', component: ScenarioPublishSubscribeComponent, active: false },
+    { name: 'ScenarioRetryMainTopicComponent', component: ScenarioRetryMainTopicComponent, active: false },
+    { name: 'ScenarioRetryNextTopicComponent', component: ScenarioRetryNextTopicComponent, active: false },
   ];
 
   public tabs: any[] = ModalScenariosComponent.TABS;
@@ -35,8 +35,8 @@ export class ModalScenariosComponent implements OnInit {
 
   static getComponentByName(name: string): any {
     for (var t in ModalScenariosComponent.TABS)
-      if (ModalScenariosComponent.TABS[t].component.name == name)
-        return ModalScenariosComponent.TABS[t].component;
+      if (ModalScenariosComponent.TABS[t].name == name)
+        return ModalScenariosComponent.TABS[t];
 
     return null;
   }
@@ -72,7 +72,7 @@ export class ModalScenariosComponent implements OnInit {
   }
 
   changeScenario() {
-    this.change.emit(this.currentTab.component);
+    this.change.emit(this.currentTab);
   }
 
   closeModal() {

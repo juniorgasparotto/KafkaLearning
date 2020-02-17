@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
     var scenario = ModalScenariosComponent.getComponentByName(localStorage.getItem('currentScenario'));
     if (!scenario) {
-      scenario = ScenarioPointToPointComponent;
+      scenario = ModalScenariosComponent.getComponentByName('ScenarioPointToPointComponent');
     }
 
     this.changeScenario(scenario);
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
     }
 
     this.closeScenarios();
-    this.addScenarioComponent(scenarioComponent);
+    this.addScenarioComponent(scenarioComponent.component);
     localStorage.setItem('currentScenario', scenarioComponent.name);
   }
 }

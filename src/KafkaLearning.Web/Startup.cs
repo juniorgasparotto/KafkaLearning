@@ -41,7 +41,7 @@ namespace KafkaLearning.Web
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:5001");
+                .WithOrigins(this.Configuration["CorsOrigins"]);
             }));
 
             services.AddSignalR()
