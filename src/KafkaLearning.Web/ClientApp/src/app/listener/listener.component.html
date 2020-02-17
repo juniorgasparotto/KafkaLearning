@@ -9,7 +9,7 @@
 <div class="content">
     <div class="config">
         <div class="settings">
-            <textarea [(ngModel)]="consumerSettignsJson" [disabled]="this.loading || hasSubcribe"></textarea>
+            <textarea [(ngModel)]="consumerDefaultJson" [disabled]="this.loading || hasSubcribe"></textarea>
         </div>
 
         <div class="options">
@@ -44,10 +44,10 @@
 
 <div class="footer">
     <span class="label">Topic:</span> 
-    <span class="value">{{consumerSettigns?.topic}}</span>
+    <span class="value">{{consumerDefault?.topic}}</span>
     
     <span class="label">GroupId:</span> 
-    <span class="value">{{consumerSettigns?.groupId}}</span>
+    <span class="value">{{consumerDefault?.groupId}}</span>
 
     <span class="label" *ngIf="appInfo">TaskId:</span>
     <span class="value" *ngIf="appInfo">{{appInfo.taskId}}</span>

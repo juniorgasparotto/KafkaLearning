@@ -117,7 +117,7 @@ namespace KafkaLearning.Web.Controllers
                 builder.WithRetry(settings.RetryTopic, settings.Delay);
                 builder.AutoOffSetReset(settings.AutoOffSetReset);
                 builder.EnableAutoCommit(settings.EnableAutoCommit);
-                builder.EnablePartionEof(settings.EnablePartionEof);
+                builder.EnablePartitionEof(settings.EnablePartitionEof);
                 //builder.MaxPollIntervalMs(settings.MaxPollIntervalMs);
                 builder.WithJsonSerializer();
 

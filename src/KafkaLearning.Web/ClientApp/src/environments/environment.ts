@@ -4,5 +4,17 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  kafka: {
+    consumerDefault: {
+      bootstrapServers: "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
+      enableAutoCommit: true,
+      autoOffSetReset: 0,
+      enablePartitionEof: true
+    },
+    producerDefault: {
+      bootstrapServers: "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
+      topic: "Chat"
+    }
+  }
 };

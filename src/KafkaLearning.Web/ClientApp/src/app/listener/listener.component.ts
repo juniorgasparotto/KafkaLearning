@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, Input, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as signalR from "@aspnet/signalr";
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-listener',
@@ -12,8 +13,8 @@ import * as signalR from "@aspnet/signalr";
 })
 export class ListenerComponent implements OnInit, AfterViewChecked {
   public message: string;
-  public consumerSettignsJson: string;
-  public consumerSettigns: ConsumerSettigns;
+  public consumerDefaultJson: string;
+  public consumerDefault: ConsumerSettigns;
   public messages: EventMessage[];
   private hubConnection: signalR.HubConnection;
   public hasSubcribe: boolean;
@@ -62,8 +63,8 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
         if (result.length > 0) {
           var appInfo = result[0];
           this.simulateError = appInfo.simulateError;
-          this.consumerSettigns = appInfo.settings;
-          this.consumerSettignsJson = JSON.stringify(this.consumerSettigns, null, 2);
+          this.consumerDefault = appInfo.settings;
+          this.consumerDefaultJson = JSON.stringify(this.consumerDefault, null, 2);
           this.subscribe();
         }
         else {
@@ -80,25 +81,25 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
   }
 
   private setSettingsDefault() {
-    this.consumerSettigns = {
-      bootstrapServers: "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
+    this.consumerDefault = {
+      bootstrapServers: environment.kafka.consumerDefault.bootstrapServers,
       groupId: this.groupId,
-      enableAutoCommit: true,
-      autoOffSetReset: 0,
-      enablePartionEof: true,
+      enableAutoCommit: environment.kafka.consumerDefault.enableAutoCommit,
+      enablePartitionEof: environment.kafka.consumerDefault.enablePartitionEof,
       topic: this.topic,
       retryTopic: this.retryTopic,
       retryStrategy: this.retryStrategy,
-      delay: this.delay
+      autoOffSetReset: environment.kafka.consumerDefault.autoOffSetReset * 1,
+      delay: this.delay * 1
     };
     
     if (!this.retryTopic)
-      delete this.consumerSettigns.retryTopic;
+      delete this.consumerDefault.retryTopic;
 
     if (!this.delay)
-      delete this.consumerSettigns.delay;
+      delete this.consumerDefault.delay;
 
-    this.consumerSettignsJson = JSON.stringify(this.consumerSettigns, null, 2);
+    this.consumerDefaultJson = JSON.stringify(this.consumerDefault, null, 2);
   }
 
   ngAfterViewChecked() {
@@ -108,9 +109,9 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
   public subscribe() {
     this.loading = true;
     this.lastError = null;
-    this.consumerSettigns = JSON.parse(this.consumerSettignsJson);
+    this.consumerDefault = JSON.parse(this.consumerDefaultJson);
 
-    this.http.post<AppInfo>(this.baseUrl + `api/Server/Subscribe?appName=${this.appName}&simulateError=${this.simulateError}`, this.consumerSettigns).subscribe(
+    this.http.post<AppInfo>(this.baseUrl + `api/Server/Subscribe?appName=${this.appName}&simulateError=${this.simulateError}`, this.consumerDefault).subscribe(
       result => {
         this.appInfo = result;
         this.listen();
@@ -252,7 +253,7 @@ interface ConsumerSettigns {
   groupId: string;
   enableAutoCommit: boolean;
   autoOffSetReset: number;
-  enablePartionEof: boolean;
+  enablePartitionEof: boolean;
   topic: string;
   retryStrategy: string;
   retryTopic: string;

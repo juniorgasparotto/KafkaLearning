@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ModalScenariosComponent } from '../modal-scenarios/modal-scenarios.component';
 import { ScenarioRetryMainTopicComponent } from '../scenarios/scenario-retry-main-topic/scenario-retry-main-topic.component';
 import { ScenarioPointToPointComponent } from '../scenarios/scenario-point-to-point/scenario-point-to-point.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
   viewContainerRefScenarios: ViewContainerRef
 
   public message: string;
-  public publisherSettigns: string;
+  public producerDefault: string;
   public viewLogs: boolean;
   public viewScenarios: boolean;
   public title: string;
@@ -29,10 +30,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.publisherSettigns = JSON.stringify({
-      "BootstrapServers": "my-cluster-kafka-bootstrap-project-kafka.192.168.0.10.nip.io:443",
-      "Topic": "Chat"
-    }, null, 2);
+    this.producerDefault = JSON.stringify(environment.kafka.producerDefault, null, 2);
 
     var scenario = ModalScenariosComponent.getComponentByName(localStorage.getItem('currentScenario'));
     if (!scenario) {
@@ -54,7 +52,7 @@ export class HomeComponent implements OnInit {
 
   sendMessage() {
     var request = {
-      settings: JSON.parse(this.publisherSettigns),
+      settings: JSON.parse(this.producerDefault),
       message: {
         message: this.message
       }

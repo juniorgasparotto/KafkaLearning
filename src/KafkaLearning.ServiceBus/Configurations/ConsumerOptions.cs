@@ -11,7 +11,7 @@ namespace KafkaLearning.ServiceBus.Configurations
         public string GroupId { get; set; }
         public bool EnableAutoCommit { get; set; }
         public int AutoOffSetReset { get; set; }
-        public bool EnablePartionEof { get; set; }
+        public bool EnablePartitionEof { get; set; }
         public int MaxPollIntervalMs { get; set; }
         public int Delay { get; set; }
     }

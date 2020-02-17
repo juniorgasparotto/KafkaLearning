@@ -80,9 +80,9 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
         //    return this;
         //}
 
-        public ConsumerConnectionBuilder<TKey, TValue> EnablePartionEof(bool? enablePartionEof)
+        public ConsumerConnectionBuilder<TKey, TValue> EnablePartitionEof(bool? enablePartitionEof)
         {
-            this.configs.EnablePartitionEof = enablePartionEof;
+            this.configs.EnablePartitionEof = enablePartitionEof;
             return this;
         }
 
