@@ -19,7 +19,7 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
             this.producerConfig = new ProducerConfig();
             this.producerBuilder = new ProducerBuilder<TKey, TValue>(producerConfig);
             this.producerConfig.SecurityProtocol = SecurityProtocol.Plaintext;
-Console.WriteLine("CONSUMER ENTROU1");
+Console.WriteLine("CONSUMER ENTROU1: " + caPath);
             if (!string.IsNullOrWhiteSpace(caPath))
             {
 Console.WriteLine("CONSUMER ENTROU2");
