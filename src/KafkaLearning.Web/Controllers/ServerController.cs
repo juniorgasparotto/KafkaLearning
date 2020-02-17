@@ -39,7 +39,8 @@ namespace KafkaLearning.Web.Controllers
             ILogger<ServerController> logger,
             IOptions<AppConfigurationOptions> appConfiguration,
             IHubContext<EventMessageHub> kafkaHubContext,
-            IHubContext<LogHub> logHubContext
+            IHubContext<LogHub> logHubContext,
+            IOptions<KafkaConfig> op
         )
         {
             this._kafkaHubContext = kafkaHubContext;
@@ -81,7 +82,7 @@ namespace KafkaLearning.Web.Controllers
             request.Message.SendDate = DateTime.Now;
 
             // Create producer
-            var builder = new ProducerConnectionBuilder<Guid, EventMessage>();
+            var builder = new ProducerConnectionBuilder<Guid, EventMessage>(this._appConfiguration.Kafka.CertificatePath);
             var producer = builder
                             .WithBootstrapServers(request.Settings.BootstrapServers)
                             .WithAsyncProducer()
@@ -109,7 +110,7 @@ namespace KafkaLearning.Web.Controllers
             {
                 TopicConsumer<Guid, EventMessage> topicConsumer;
                 var cancelSource = new CancellationTokenSource();
-                var builder = new ConsumerConnectionBuilder<Guid, EventMessage>();
+                var builder = new ConsumerConnectionBuilder<Guid, EventMessage>(this._appConfiguration.Kafka.CertificatePath);
                 builder.WithBrokers(settings.BootstrapServers);
                 builder.WithTopic(settings.Topic);
                 builder.WithGroupId(settings.GroupId);

@@ -90,7 +90,7 @@ namespace KafkaLearning.ServiceBus.Helpers
         private static ProducerSyncSender<TKey, TValue> GetResendProducerSender<TKey, TValue>(ConsumerConnectionBuilder<TKey, TValue> cb, IServiceBusLogger logger)
         {
             // Cria o produtor com o mesmo endereço do consumidor (isso pode melhorar)
-            var produtorBuilder = new ProducerConnectionBuilder<TKey, TValue>();
+            var produtorBuilder = new ProducerConnectionBuilder<TKey, TValue>(cb.CaPath);
             var producer = produtorBuilder
                 .WithBootstrapServers(cb.GetConsumerConfig().BootstrapServers)
                 .WithAsyncProducer()

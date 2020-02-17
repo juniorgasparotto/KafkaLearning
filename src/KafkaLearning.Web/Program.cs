@@ -57,6 +57,13 @@ namespace KafkaLearning.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, config) => {
+                    var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    config.Sources.Clear();
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    config.AddJsonFile($"appsettings.{environmentName?.ToLower()}.json", optional: true, reloadOnChange: true);
+                    config.AddEnvironmentVariables();
+                })
                 .UseStartup<Startup>()
                 .UseSerilog();
 

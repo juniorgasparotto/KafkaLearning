@@ -4,5 +4,6 @@ namespace KafkaLearning.ServiceBus.Configurations
     {
         public string Topic { get; set; }
         public string BootstrapServers { get; set; }
+
     }
 }

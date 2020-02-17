@@ -3,7 +3,6 @@ using System;
 using Confluent.SchemaRegistry.Serdes;
 using Confluent.SchemaRegistry;
 using Confluent.Kafka.SyncOverAsync;
-using Newtonsoft.Json;
 using KafkaLearning.ServiceBus.Kafka.Serdes;
 
 namespace KafkaLearning.ServiceBus.Kafka.Consumer
@@ -17,18 +16,23 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
         internal string RetryTopic { get; private set; }
         internal int Delay { get; private set; }
         internal string Topic { get; private set; }
+        internal string CaPath { get; private set; }
 
-        public ConsumerConnectionBuilder()
+        public ConsumerConnectionBuilder(string caPath)
         {
+            this.CaPath = caPath;
             this.configs = new ConsumerConfig()
             {
                 MaxPollIntervalMs = 60000,
             };
-            
-            this.configs.Debug = "all";
-            this.configs.SecurityProtocol = SecurityProtocol.Ssl;
-            this.configs.SslCaLocation = @"C:\kafka_2.11-2.3.0\bin\windows\ca.crt";
-            this.consumerBuilder = new ConsumerBuilder<TKey, TValue>(configs);
+
+            if (caPath != null)
+            {
+                //this.configs.Debug = "all";
+                this.configs.SecurityProtocol = SecurityProtocol.Ssl;
+                this.configs.SslCaLocation = caPath;
+                this.consumerBuilder = new ConsumerBuilder<TKey, TValue>(configs);
+            }
         }
 
         #region Fluent setters

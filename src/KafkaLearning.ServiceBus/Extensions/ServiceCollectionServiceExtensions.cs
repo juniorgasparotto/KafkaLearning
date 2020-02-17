@@ -7,20 +7,24 @@ using KafkaLearning.ServiceBus.Kafka.Consumer;
 using KafkaLearning.ServiceBus.Kafka.Producer;
 using KafkaLearning.ServiceBus.Logs;
 using KafkaLearning.ServiceBus.Helpers;
+using Microsoft.Extensions.Options;
+using KafkaLearning.Web.Infrastructure.Configurations;
+using Microsoft.Extensions.Configuration;
 
 namespace KafkaLearning.ServiceBus.Extensions
 {
     public static class ServiceCollectionServiceExtensions
     {
-        public static KafkaBuilder AddKafka(this IServiceCollection services)
+        public static KafkaBuilder AddKafka(this IServiceCollection services, IConfiguration configuration)
         {
             // Injeta as classes que são transversais
             services.AddSingleton<IServiceBusLogger, ServiceBusLogger>();
+            services.Configure<KafkaConfig>(k => configuration.GetSection("Kafka").Bind(k));
             return new KafkaBuilder(services);
         }
 
         public static KafkaBuilder AddProducer<TKey, TValue>(
-            this KafkaBuilder kafkaBuilder, 
+            this KafkaBuilder kafkaBuilder,
             Action<IServiceProvider, ProducerConnectionBuilder<TKey, TValue>> optionsAction
         )
         {
@@ -28,19 +32,20 @@ namespace KafkaLearning.ServiceBus.Extensions
         }
 
         public static KafkaBuilder AddProducer<TProducerClient, TKey, TValue>(
-            this KafkaBuilder kafkaBuilder, 
+            this KafkaBuilder kafkaBuilder,
             Action<IServiceProvider, ProducerConnectionBuilder<TKey, TValue>> optionsAction
         )
             where TProducerClient : class, IProducerClient<TKey, TValue>
         {
             var services = kafkaBuilder.Services;
-            
+
             services.AddSingleton<IProducerClient<TKey, TValue>, TProducerClient>();
 
             services.AddSingleton<IProducerSender<TKey, TValue>>(s =>
             {
                 var logger = s.GetRequiredService<IServiceBusLogger>();
-                var builder = new ProducerConnectionBuilder<TKey, TValue>();
+                var config = s.GetService<IOptions<KafkaConfig>>();
+                var builder = new ProducerConnectionBuilder<TKey, TValue>(config.Value.CertificatePath);
                 var producerClient = s.GetRequiredService<IProducerClient<TKey, TValue>>();
 
                 optionsAction(s, builder);
@@ -77,7 +82,8 @@ namespace KafkaLearning.ServiceBus.Extensions
                 var logger = s.GetService<IServiceBusLogger>();
                 var loggerServiceHosted = s.GetService<ILogger<DefaultConsumerHostedService<TKey, TValue>>>();
                 var client = s.GetRequiredService<TConsumerClient>();
-                var cb = new ConsumerConnectionBuilder<TKey, TValue>();
+                var config = s.GetService<IOptions<KafkaConfig>>();
+                var cb = new ConsumerConnectionBuilder<TKey, TValue>(config.Value.CertificatePath);
 
                 optionsAction(s, cb);
 
@@ -103,7 +109,8 @@ namespace KafkaLearning.ServiceBus.Extensions
                 var logger = s.GetService<IServiceBusLogger>();
                 var loggerServiceHosted = s.GetService<ILogger<DefaultConsumerHostedService<TKey, TValue>>>();
                 var client = s.GetRequiredService<TConsumerClient>();
-                var cb = new ConsumerConnectionBuilder<TKey, TValue>();
+                var config = s.GetService<IOptions<KafkaConfig>>();
+                var cb = new ConsumerConnectionBuilder<TKey, TValue>(config.Value.CertificatePath);
 
                 optionsAction(s, cb);
 
@@ -132,7 +139,8 @@ namespace KafkaLearning.ServiceBus.Extensions
                 var logger = s.GetService<IServiceBusLogger>();
                 var loggerServiceHosted = s.GetService<ILogger<DefaultConsumerHostedService<TKey, TValue>>>();
                 var client = s.GetRequiredService<TConsumerClient>();
-                var cb = new ConsumerConnectionBuilder<TKey, TValue>();
+                var config = s.GetService<IOptions<KafkaConfig>>();
+                var cb = new ConsumerConnectionBuilder<TKey, TValue>(config.Value.CertificatePath);
 
                 optionsAction(s, cb);
 

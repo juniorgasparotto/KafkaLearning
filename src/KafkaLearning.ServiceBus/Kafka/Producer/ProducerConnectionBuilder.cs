@@ -14,13 +14,16 @@ namespace KafkaLearning.ServiceBus.Kafka.Producer
 
         internal bool AsyncProducer { get; private set; }
 
-        public ProducerConnectionBuilder()
+        public ProducerConnectionBuilder(string caPath)
         {
             this.producerConfig = new ProducerConfig();
             this.producerBuilder = new ProducerBuilder<TKey, TValue>(producerConfig);
 
-            this.producerConfig.SecurityProtocol = SecurityProtocol.Ssl;
-            this.producerConfig.SslCaLocation = @"C:\kafka_2.11-2.3.0\bin\windows\ca.crt";
+            if (caPath != null)
+            {
+                this.producerConfig.SecurityProtocol = SecurityProtocol.Ssl;
+                this.producerConfig.SslCaLocation = caPath;
+            }
         }
 
         #region Fluent setters

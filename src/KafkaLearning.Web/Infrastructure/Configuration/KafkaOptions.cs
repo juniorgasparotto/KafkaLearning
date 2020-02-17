@@ -1,8 +1,9 @@
 ﻿using KafkaLearning.ServiceBus.Configurations;
+using KafkaLearning.Web.Infrastructure.Configurations;
 
 namespace KafkaLearning.Web.Infrastructure.Configuration
 {
-    public class KafkaOptions
+    public class KafkaOptions : KafkaConfig
     {
         public ProducersOptions Producers { get; set; }
         public ConsumersOptions Consumers { get; set; }

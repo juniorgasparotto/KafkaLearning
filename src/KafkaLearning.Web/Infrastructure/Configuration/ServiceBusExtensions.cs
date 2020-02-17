@@ -7,6 +7,7 @@ using KafkaLearning.ServiceBus.Extensions;
 using KafkaLearning.ServiceBus.Logs;
 using KafkaLearning.Web.Core.Entities;
 using KafkaLearning.Web.Infrastructure.Configurations;
+using Microsoft.Extensions.Configuration;
 
 namespace KafkaLearning.Web.Infrastructure.Configuration
 {
@@ -17,9 +18,9 @@ namespace KafkaLearning.Web.Infrastructure.Configuration
         /// </summary>
         /// <param name="serviceCollection">Instance of ServiceCollection type.</param>
         /// <returns>The given serviceCollection instance with interfaces and implementations registered.</returns>
-        public static IServiceCollection AddServiceBus(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddServiceBus(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            serviceCollection.AddKafka();
+            serviceCollection.AddKafka(configuration);
             return serviceCollection;
         }
     }
