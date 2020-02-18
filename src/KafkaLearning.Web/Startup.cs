@@ -22,7 +22,7 @@ namespace KafkaLearning.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName?.ToLower()}.json", optional: true);
 
             logger.LogInformation("DEBUG: ASPNETCORE_ENVIRONMENT: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             logger.LogInformation("DEBUG: IWebHostEnvironment.EnvironmentName: " + env.EnvironmentName);
