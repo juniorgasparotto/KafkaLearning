@@ -25,10 +25,9 @@ namespace KafkaLearning.ServiceBus.Kafka.Consumer
             {
                 MaxPollIntervalMs = 60000,
             };
-Console.WriteLine("ENTROU1: " + caPath);
+
             if (!string.IsNullOrWhiteSpace(caPath))
             {
-                Console.WriteLine("ENTROU2");
                 //this.configs.Debug = "all";
                 this.configs.SecurityProtocol = SecurityProtocol.Ssl;
                 this.configs.SslCaLocation = caPath;
