@@ -8,14 +8,27 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using KafkaLearning.Web.Hubs;
 using KafkaLearning.Web.Infrastructure.Configuration;
+using System;
 
 namespace KafkaLearning.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        // https://github.com/dotnet/aspnetcore/blob/658b37d2bd3b0da2c07e25b53fa5c97ce8d656d3/src/Identity/samples/IdentitySample.Mvc/Startup.cs
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             Configuration = configuration;
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            logger.LogInformation("DEBUG: ASPNETCORE_ENVIRONMENT: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            logger.LogInformation("DEBUG: IWebHostEnvironment.EnvironmentName: " + env.EnvironmentName);
+
+            builder.AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
