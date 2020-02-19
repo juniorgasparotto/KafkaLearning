@@ -70,6 +70,16 @@ dotnet run
 * Click on the `Subscribe All` button. The default scenario will be `Publish / Subscribe`
 * Send a message by clicking the `Send` button and note that the message will arrive at both the` app1` and `app2` listeners.
 
+## Change default settings (example: Kafka's default URL)
+
+* Environment `development`:
+  * .NET: If you don't need to use a certificate (usually localhost: 9092 doesn't need to): Open the file `\src\KafkaLearning.Web\appsettings.json` and remove the certificate configuration in the property:` Kafka -> CertificatePath: null`.
+  * .NET: If certificate use is required: replace the certificate file in the following folder with your certificate: `\src\KafkaLearning.Web\Certificates\ca.crt`. If you change the file name of the certificate, change the path in the `CertificatePath` property and ensure that this new file is being copied to the` bin` folder in the build process: `\src\KafkaLearning.Web\KafkaLearning.Web.csproj`.
+  * Angular: Open the file `\src\KafkaLearning.Web\ClientApp\src\environments\environment.ts` and change the default URL or any other information.
+* Environment `production`:
+  * .NET: Same procedure as in the DEV environment, however, use the file `appsettings.production.json`.
+  * Open the file `\src\KafkaLearning.Web\ClientApp\src\environments\environment.prod.ts` and exchange standard URL or any other information.
+
 ## Change scenery
 
 To switch scenarios, click on the `Change Scenario` button and select the desired scenario:
@@ -116,14 +126,13 @@ ng g c ScenarioMyCustomTest
 
 ```typescript
 private static TABS: any[] = [
-    { component: ScenarioPointToPointComponent, active: false },
-    { component: ScenarioPublishSubscribeComponent, active: false },
-    { component: ScenarioRetryMainTopicComponent, active: false },
-    { component: ScenarioRetryNextTopicComponent, active: false },
+    { name: 'ScenarioPointToPointComponent', component: ScenarioPointToPointComponent, active: false },
+    { name: 'ScenarioPublishSubscribeComponent', component: ScenarioPublishSubscribeComponent, active: false },
+    { name: 'ScenarioRetryMainTopicComponent', component: ScenarioRetryMainTopicComponent, active: false },
+    { name: 'ScenarioRetryNextTopicComponent', component: ScenarioRetryNextTopicComponent, active: false },
     
-    { component: ScenarioMyCustomTest, active: false },
-    //  ^^^^^
-
+    // new scenario
+    { name: 'ScenarioMyCustomTest', component: ScenarioMyCustomTest, active: false },
   ];
 ```
 
@@ -160,11 +169,108 @@ The `app-listener` component/listener settings have a direct relationship to the
 
 NOTE: Maybe using the `redirect` value in the` retryStrategy` setting does not make sense, check if it would be better to create something like: `handler=none|redirect` and` handle-args=REDIRECT_TOPIC_NAME`.
 
+## Installing on OpenShift (OKD)
+
+Before installing KafkaLearning, it is necessary to have a Kafka service that can be accessible from within the cluster. Or use the `Strimzi` project to install a Kafka cluster within your cluster:
+
+https://strimzi.io/quickstarts/okd/
+
+**Useful links:**
+
+* https://github.com/redhat-developer/s2i-dotnetcore
+* https://docs.openshift.com/container-platform/3.7/dev_guide/application_lifecycle/new_app.html
+
+**Installation step by step:**
+
+* Create the openshift secret to access the RedHat registry. You need an active RedHat registry: https://access.redhat.com/
+
+```
+oc create secret docker-registry redhat-registry \
+    --docker-server=registry.redhat.io \
+    --docker-username=<user> \
+    --docker-password=<pwd> \
+    --docker-email=<email> \
+    -n openshift
+```
+
+* Install ImageStream
+
+```
+oc create -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/dotnet_imagestreams.json
+```
+
+* Or update
+
+```
+oc replace -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/dotnet_imagestreams.json
+```
+
+* Create a project to contain KafkaLearning
+
+```
+oc new-project project-kafka
+```
+
+* Or just select a project in which you want it to contain it
+
+```
+oc project [project-name]
+```
+
+* Create the Kafka Learning application
+
+```
+oc new-app 'dotnet:3.1~https://github.com/juniorgasparotto/KafkaLearning.git' \
+--name=kafka-learning \
+--context-dir src \
+--build-env DOTNET_STARTUP_PROJECT=KafkaLearning.Web/KafkaLearning.Web.csproj \
+--build-env DOTNET_CONFIGURATION=Release
+```
+
+* Follow the image build log
+
+```
+oc logs -f bc/kafka-learning
+```
+
+* Follow the image deployment log
+
+```
+oc logs -f dc/kafka-learning
+```
+
+* Exposes a route to gain access from outside the cluster
+
+```
+oc expose svc/kafka-learning
+```
+
+* Obtain the route address and check outside the cluster that everything is working (Requested Host: <rout>)
+
+```
+oc describe route kafka-learning
+```
+
+* To see all the objects created, use:
+
+```
+oc get all -l app=kafka-learning
+```
+
+* If you want to remove Kafka-Learning and all its objects, do:
+
+```
+oc delete all -l app=kafka-learning
+```
+
+* It may be that in the first "Subscribe" you receive errors, this is because all .NET dependencies have not yet risen completely.
+
 ## Improvements
 
 * Create an abstract class for all scenarios so you don't have to copy the same code every time you create a new scenario
 * Send producer data into scenario
 * Rename the classes from `ConsumerClient` to` Listener` and simplify mechanism.
+* Leave the Kafka URL to be overwritten by an environment variable.
 
 ## Useful tools:
 
