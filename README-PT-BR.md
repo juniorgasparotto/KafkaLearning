@@ -170,7 +170,11 @@ As configurações do componente/ouvinte `app-listener` tem uma relação direta
 
 OBS: Talvez o uso do valor `redirect` na configuração `retryStrategy` não faça sentido, verificar se não seria melhor criar algo como: `handler=none|redirect` e `handle-args=REDIRECT_TOPIC_NAME`.
 
-## Instalando no OpenShift
+## Instalando no OpenShift (OKD)
+
+Antes de instalar o KafkaLearning, é necessário ter um serviço do Kafka que possa ser acessível de dentro do cluster. Ou utilize o projeto `Strimzi` para instalar um cluster Kafka dentro do seu cluster:
+
+https://strimzi.io/quickstarts/okd/
 
 **Links úteis:**
 
