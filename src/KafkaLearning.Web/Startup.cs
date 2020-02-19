@@ -26,6 +26,7 @@ namespace KafkaLearning.Web
 
             logger.LogInformation("DEBUG: ASPNETCORE_ENVIRONMENT: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             logger.LogInformation("DEBUG: IWebHostEnvironment.EnvironmentName: " + env.EnvironmentName);
+            logger.LogInformation("DEBUG: IWebHostEnvironment.WebRootPath: " + env.WebRootPath);
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();

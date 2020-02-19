@@ -18,7 +18,7 @@ Esse projeto tem o objetivo de demonstrar como funciona alguns conceitos do Kafk
 * NodeJs (npm, angular 7)
 * Chrome (Com suporte a WebSocket/SignalR)
 
-## Executando
+## Executando (LocalHost)
 
 * Fazer o download do Kafka: https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.11-2.3.0.tgz
 * Descompactar o Kafka na pasta `C:\` (ou qualquer outra pasta)
@@ -67,8 +67,19 @@ dotnet run
 
 ![change scenario](./assets/screen.PNG)
 
+* Garanta que o produtor e todos os ouvintes estejam usando a URL correta do Kafka, normalmente é "localhost:9092", mas esse projeto pode estar configurado para usar outro URL (o que utilizo no dia a dia).
 * Clique no botão `Subscribe All`. O cenário padrão será o `Publish/Subscribe`
 * Envia uma mensagem clicando no botão `Send` e note que a mensagem chegará nos dois ouvintes `app1` e `app2`.
+
+## Trocar as configurações padrão (exemplo: URL padrão do Kafka)
+
+* Ambiente de `development`:
+  * .NET: Caso não seja necessário o uso de certificado (normalmente, localhost:9092 não precisa): Abra o arquivo `\src\KafkaLearning.Web\appsettings.json` e remova a configuração de certificado na propriedade: `Kafka -> CertificatePath: null`.
+  * .NET: Caso seja necessário o uso de certificado: substitua o arquivo do certificado da pasta a seguir pelo seu certificado: `\src\KafkaLearning.Web\Certificates\ca.crt`. Caso você mude o nome do arquivo do certificado, altere o caminho na propriedade `CertificatePath` e garanta que esse novo arquivo esteja sendo copiado para a pasta `bin` no processo de build: `\src\KafkaLearning.Web\KafkaLearning.Web.csproj`.
+  * Angular: Abra o arquivo `\src\KafkaLearning.Web\ClientApp\src\environments\environment.ts` e troque URL padrão ou qualquer outra informação.
+* Ambiente de `production`:
+  * .NET: Mesmo procedimento do ambiente de DEV, porém, utilize o arquivo `appsettings.production.json`.
+  * Abra o arquivo `\src\KafkaLearning.Web\ClientApp\src\environments\environment.prod.ts` e troque URL padrão ou qualquer outra informação.
 
 ## Trocar de cenário
 
@@ -116,14 +127,13 @@ ng g c ScenarioMyCustomTest
 
 ```typescript
 private static TABS: any[] = [
-    { component: ScenarioPointToPointComponent, active: false },
-    { component: ScenarioPublishSubscribeComponent, active: false },
-    { component: ScenarioRetryMainTopicComponent, active: false },
-    { component: ScenarioRetryNextTopicComponent, active: false },
+    { name: 'ScenarioPointToPointComponent', component: ScenarioPointToPointComponent, active: false },
+    { name: 'ScenarioPublishSubscribeComponent', component: ScenarioPublishSubscribeComponent, active: false },
+    { name: 'ScenarioRetryMainTopicComponent', component: ScenarioRetryMainTopicComponent, active: false },
+    { name: 'ScenarioRetryNextTopicComponent', component: ScenarioRetryNextTopicComponent, active: false },
     
-    { component: ScenarioMyCustomTest, active: false },
-    //  ^^^^^
-
+    // new scenario
+    { name: 'ScenarioMyCustomTest', component: ScenarioMyCustomTest, active: false },
   ];
 ```
 
@@ -160,11 +170,104 @@ As configurações do componente/ouvinte `app-listener` tem uma relação direta
 
 OBS: Talvez o uso do valor `redirect` na configuração `retryStrategy` não faça sentido, verificar se não seria melhor criar algo como: `handler=none|redirect` e `handle-args=REDIRECT_TOPIC_NAME`.
 
+## Instalando no OpenShift
+
+**Links úteis:**
+
+* https://github.com/redhat-developer/s2i-dotnetcore
+* https://docs.openshift.com/container-platform/3.7/dev_guide/application_lifecycle/new_app.html
+
+**Passo a passo da instalação:**
+
+* Crie o secret no openshift para acessar o registry da RedHat. Você precisa de um cadastro ativo na RedHat: https://access.redhat.com/
+
+```
+oc create secret docker-registry redhat-registry \
+    --docker-server=registry.redhat.io \
+    --docker-username=<user> \
+    --docker-password=<pwd> \
+    --docker-email=<email> \
+    -n openshift
+```
+
+* Instalar o ImageStream
+
+```
+oc create -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/dotnet_imagestreams.json
+```
+
+* Ou atualize
+
+```
+oc replace -f https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore/master/dotnet_imagestreams.json
+```
+
+* Crie um projeto para conter o KafkaLearning
+
+```
+oc new-project project-kafka
+```
+
+* Ou apenas selecione um projeto no qual deseja que o contenha
+
+```
+oc project [project-name]
+```
+
+* Crie a aplicação do Kafka Learning
+
+```
+oc new-app 'dotnet:3.1~https://github.com/juniorgasparotto/KafkaLearning.git' \
+--name=kafka-learning \
+--context-dir src \
+--build-env DOTNET_STARTUP_PROJECT=KafkaLearning.Web/KafkaLearning.Web.csproj \
+--build-env DOTNET_CONFIGURATION=Release
+```
+
+* Acompanhe o log do build da imagem
+
+```
+oc logs -f bc/kafka-learning
+```
+
+* Acompanhe o log do deploy da imagem
+
+```
+oc logs -f dc/kafka-learning
+```
+
+* Expõe uma rota para conseguir acessar de fora do cluster
+
+```
+oc expose svc/kafka-learning
+```
+
+* Obtêm o endereço da rota e verifique fora do cluster se tudo está funcionando (Requested Host: <rota>)
+
+```
+oc describe route kafka-learning
+```
+
+* Para ver todos os objetos criado, utilize:
+
+```
+oc get all -l app=kafka-learning
+```
+
+* Caso queira remover o Kafka-Learning e todos os seus objetos, faça:
+
+```
+oc delete all -l app=kafka-learning
+```
+
+* Pode ser que no primeiro "Subscribe" você receba erros, isso ocorre pois todas as dependências do .NET ainda não subiram completamente.
+
 ## Melhorias
 
 * Criar uma classe abstrata para todos os cenários para não precisar copiar o mesmo código toda vez que cria um novo cenário
 * Enviar os dados do produtor para dentro do cenário
 * Renomear as classes de `ConsumerClient` para `Listener` e simplificar mecanismo.
+* Deixar a URL do Kafka para ser sobrescrita por uma variável de ambiente.
 
 ## Ferramentas uteis:
 
