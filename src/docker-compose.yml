@@ -21,7 +21,7 @@ services:
     depends_on:
       - zookeeper
   kafka-learning:
-    image: 'juniorgasparotto/kafka-learning'
+    image: 'juniorgasparotto/kafka-learning:lastest'
     ports:
       - '5000:5000'
     environment:
