@@ -20,7 +20,24 @@ This project aims to demonstrate how some Kafka concepts work. For now, we have 
 
 ## Running with docker
 
+To run using docker and without installing anything on your host machine.
 
+```
+curl -sSL https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/src/docker-compose.yml > docker-compose.yml
+docker-compose up -d
+```
+
+### Build a new image
+
+Steps to build a new image:
+
+```
+cd /src
+docker build . --tag kafka-learning:1.0
+docker run -e Kafka__CertificatePath="" -e "Kafka__Producers__TopicSample__BootstrapServers=localhost:9092" -e "Kafka__Consumers__TopicSample__BootstrapServers=localhost:9092" -e ASPNETCORE_URLS="http://0.0.0.0:5000" -ti -p 5000:5000 kafka-learning:1.0
+docker tag kafka-learning:1.0 juniorgasparotto/kafka-learning:latest
+docker push juniorgasparotto/kafka-learning:latest
+```
 
 ## Running as developer
 
@@ -29,13 +46,15 @@ This project aims to demonstrate how some Kafka concepts work. For now, we have 
 * Run Zookeeper using the default setting:
 
 ```
-C:/kafka_2.11-2.3.0/bin/windows/zookeeper-server-start.bat C:/kafka_2.11-2.3.0/config/zookeeper.properties
+C:/kafka_2.11-2.3.0/
+./bin/windows/zookeeper-server-start.bat ./config/zookeeper.properties
 ```
 
 * Run Kafka broker using the default setting:
 
 ```
-C:/kafka_2.11-2.3.0/bin/windows/kafka-server-start.bat C:/kafka_2.11-2.3.0/config/server.properties
+C:/kafka_2.11-2.3.0/
+./bin/windows/kafka-server-start.bat ./config/server.properties
 ```
 
 * Clone this project to your preferred location

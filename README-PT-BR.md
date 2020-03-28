@@ -18,20 +18,43 @@ Esse projeto tem o objetivo de demonstrar como funciona alguns conceitos do Kafk
 * NodeJs (npm, angular 7)
 * Chrome (Com suporte a WebSocket/SignalR)
 
-## Executando (LocalHost)
+## Executando no docker
+
+To run using docker and without installing anything on your host machine.
+
+```
+curl -sSL https://raw.githubusercontent.com/juniorgasparotto/KafkaLearning/master/src/docker-compose.yml > docker-compose.yml
+docker-compose up -d
+```
+
+### Criando uma nova versão da imagem
+
+Steps to build a new image:
+
+```
+cd /src
+docker build . --tag kafka-learning:1.0
+docker run -e Kafka__CertificatePath="" -e "Kafka__Producers__TopicSample__BootstrapServers=localhost:9092" -e "Kafka__Consumers__TopicSample__BootstrapServers=localhost:9092" -e ASPNETCORE_URLS="http://0.0.0.0:5000" -ti -p 5000:5000 kafka-learning:1.0
+docker tag kafka-learning:1.0 juniorgasparotto/kafka-learning:latest
+docker push juniorgasparotto/kafka-learning:latest
+```
+
+## Executando como desenvolvedor (LocalHost)
 
 * Fazer o download do Kafka: https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.11-2.3.0.tgz
 * Descompactar o Kafka na pasta `C:\` (ou qualquer outra pasta)
 * Executar o Zookeeper usando a configuração padrão:
 
 ```
-C:/kafka_2.11-2.3.0/bin/windows/zookeeper-server-start.bat C:/kafka_2.11-2.3.0/config/zookeeper.properties
+C:/kafka_2.11-2.3.0/
+./bin/windows/zookeeper-server-start.bat ./config/zookeeper.properties
 ```
 
 * Executar o broker do Kafka usando a configuração padrão:
 
 ```
-C:/kafka_2.11-2.3.0/bin/windows/kafka-server-start.bat C:/kafka_2.11-2.3.0/config/server.properties
+C:/kafka_2.11-2.3.0/
+./bin/windows/kafka-server-start.bat ./config/server.properties
 ```
 
 * Fazer o clone desse projeto em seu local de preferência
