@@ -22,6 +22,7 @@ using KafkaLearning.Web.Infrastructure.Configurations;
 using KafkaLearning.Web.Infrastructure.ConsumersClients;
 using KafkaLearning.Web.Infrastructure.ViewModel;
 using System.Linq;
+using KafkaLearning.Web.Infrastructure.Configuration;
 
 namespace KafkaLearning.Web.Controllers
 {
@@ -48,6 +49,11 @@ namespace KafkaLearning.Web.Controllers
             this._logger = logger;
         }
 
+        [HttpGet("[action]")]
+        public KafkaOptions GetConfigs()
+        {
+            return _appConfiguration.Kafka;
+        }
 
         [HttpGet("[action]")]
         public void EnableError(string appName, bool value)

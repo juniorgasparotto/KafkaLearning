@@ -18,7 +18,11 @@ This project aims to demonstrate how some Kafka concepts work. For now, we have 
 * NodeJs (npm, angular 7)
 * Chrome (With WebSocket / SignalR Support)
 
-## Running
+## Running with docker
+
+
+
+## Running as developer
 
 * Download Kafka: https://www.apache.org/dyn/closer.cgi?path=/kafka/2.3.0/kafka_2.11-2.3.0.tgz
 * Unzip Kafka in the `C:\` folder (or any other folder)

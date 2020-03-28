@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.producerDefault = JSON.stringify(environment.kafka.producerDefault, null, 2);
+    this.setConfigs();
 
     var scenario = ModalScenariosComponent.getComponentByName(localStorage.getItem('currentScenario'));
     if (!scenario) {
@@ -38,6 +38,19 @@ export class HomeComponent implements OnInit {
     }
 
     this.changeScenario(scenario);
+  }
+
+  private setConfigs() {
+    this.http.get<any>(this.baseUrl + `api/Server/GetConfigs`).subscribe(
+      result => {
+        var config = Object.assign({}, environment.kafka.producerDefault);
+        config.bootstrapServers = result.producers.topicSample.bootstrapServers;
+        this.producerDefault = JSON.stringify(config, null, 2);
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
 
   addScenarioComponent(componentScenario: any) {

@@ -59,7 +59,7 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
 
   public setSettings() {
     this.http.get<AppInfo[]>(this.baseUrl + `api/Server/GetSubscribers?appName=${this.appName}`).subscribe(
-      result => {        
+      result => {
         if (result.length > 0) {
           var appInfo = result[0];
           this.simulateError = appInfo.simulateError;
@@ -81,25 +81,33 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
   }
 
   private setSettingsDefault() {
-    this.consumerDefault = {
-      bootstrapServers: environment.kafka.consumerDefault.bootstrapServers,
-      groupId: this.groupId,
-      enableAutoCommit: environment.kafka.consumerDefault.enableAutoCommit,
-      enablePartitionEof: environment.kafka.consumerDefault.enablePartitionEof,
-      topic: this.topic,
-      retryTopic: this.retryTopic,
-      retryStrategy: this.retryStrategy,
-      autoOffSetReset: environment.kafka.consumerDefault.autoOffSetReset * 1,
-      delay: this.delay * 1
-    };
-    
-    if (!this.retryTopic)
-      delete this.consumerDefault.retryTopic;
+    this.http.get<any>(this.baseUrl + `api/Server/GetConfigs`).subscribe(
+      result => {
+        this.consumerDefault = {
+          bootstrapServers: result.consumers.topicSample.bootstrapServers,
+          groupId: this.groupId,
+          enableAutoCommit: environment.kafka.consumerDefault.enableAutoCommit,
+          enablePartitionEof: environment.kafka.consumerDefault.enablePartitionEof,
+          topic: this.topic,
+          retryTopic: this.retryTopic,
+          retryStrategy: this.retryStrategy,
+          autoOffSetReset: environment.kafka.consumerDefault.autoOffSetReset * 1,
+          delay: this.delay * 1
+        };
 
-    if (!this.delay)
-      delete this.consumerDefault.delay;
+        if (!this.retryTopic)
+          delete this.consumerDefault.retryTopic;
 
-    this.consumerDefaultJson = JSON.stringify(this.consumerDefault, null, 2);
+        if (!this.delay)
+          delete this.consumerDefault.delay;
+
+        this.consumerDefaultJson = JSON.stringify(this.consumerDefault, null, 2);
+      },
+      error => {
+        console.error(error);
+        this.lastError = error;
+      }
+    );
   }
 
   ngAfterViewChecked() {
@@ -221,7 +229,7 @@ export class ListenerComponent implements OnInit, AfterViewChecked {
     );
   }
 
-  public isSubscribe() : boolean {
+  public isSubscribe(): boolean {
     return this.hasSubcribe;
   }
 
