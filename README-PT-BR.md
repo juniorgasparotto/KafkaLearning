@@ -33,10 +33,9 @@ Steps to build a new image:
 
 ```
 cd /src
-docker build . --tag kafka-learning:1.0
+docker build . --tag juniorgasparotto/kafka-learning:1.0
 docker run -e Kafka__CertificatePath="" -e "Kafka__Producers__TopicSample__BootstrapServers=localhost:9092" -e "Kafka__Consumers__TopicSample__BootstrapServers=localhost:9092" -e ASPNETCORE_URLS="http://0.0.0.0:5000" -ti -p 5000:5000 kafka-learning:1.0
-docker tag kafka-learning:1.0 juniorgasparotto/kafka-learning:latest
-docker push juniorgasparotto/kafka-learning:latest
+docker push juniorgasparotto/kafka-learning:1.0
 ```
 
 ## Executando como desenvolvedor (LocalHost)

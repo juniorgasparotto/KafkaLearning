@@ -34,7 +34,7 @@ RUN dotnet publish -c Release -o /app/publish
 # 8) Cria a imagem final
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 # 9) Executa a aplicação
 ENTRYPOINT ["dotnet", "KafkaLearning.Web.dll"]
