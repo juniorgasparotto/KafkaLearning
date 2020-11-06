@@ -85,7 +85,7 @@ cd src/KafkaLearning.Web
 dotnet run
 ```
 
-* Open in Chrome the url: https://localhost:5001. You should see the following screen:
+* Open in Chrome the url: http://localhost:5000. You should see the following screen:
     * If this port is being used by another project, change it.
 
 ![change scenario](./assets/screen.PNG)
